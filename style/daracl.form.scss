@@ -255,8 +255,14 @@ body.dark .daracl-form,
       width: auto;
       max-width: none;
 
-      > .form-group > .empty {
-        display: none !important;
+      > .form-group {
+        > .empty {
+          display: none !important;
+        }
+
+        & + .form-group {
+          margin-left: 10px;
+        }
       }
     }
 
@@ -321,7 +327,6 @@ body.dark .daracl-form,
     }
     .df-field {
       position: relative;
-      margin-right: 10px;
 
       .range-num {
         clear: both;
