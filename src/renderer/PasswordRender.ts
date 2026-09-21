@@ -27,10 +27,10 @@ export default class PasswordRender extends Render {
 
     fieldContainerElement.innerHTML = `
         <div class="df-field">
-            <input type="password" name="${field.$xssName}" class="form-field password help-icon" autocomplete="off" />
+            <input type="password" name="${field.$xssName}" class="df-form-field df-password df-help-icon" autocomplete="off" />
         </div>
         ${Render.getDescriptionTemplate(field)}
-        <div class="help-message"></div>
+        <div class="df-help-message"></div>
     `;
 
     this.element = fieldContainerElement.querySelector(`[name="${field.$xssName}"]`) as HTMLInputElement;

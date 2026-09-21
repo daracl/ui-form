@@ -1,0 +1,47 @@
+@mixin df-form-field {
+  .df-form-field {
+    border: 1px solid var(--border-color);
+    display: block;
+    width: 100%;
+    padding: 0.375rem 0.75rem;
+    font-weight: 400;
+    line-height: 1.5;
+    border-radius: 4px;
+    transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+    background-color: var(--input-bg);
+    background-clip: padding-box;
+    color: var(--input-color);
+
+    &[type="radio"],
+    &[type="checkbox"] {
+      width: 14px;
+      display: inline;
+      min-height: 0px;
+      padding: 0px;
+      margin: 0px;
+      vertical-align: middle;
+    }
+
+    &.df-dropdown {
+      appearance: none;
+      -webkit-appearance: none;
+      -moz-appearance: none;
+    }
+
+    &.df-textarea {
+      padding-right: 0px;
+    }
+
+    &[type="number"] {
+      padding-right: 3px;
+    }
+
+    &.df-file {
+      display: none;
+    }
+
+    &.df-range {
+      padding: 0px;
+    }
+  }
+}

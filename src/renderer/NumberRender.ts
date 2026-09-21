@@ -27,10 +27,10 @@ export default class NumberRender extends Render {
 
     fieldContainerElement.innerHTML = `
         <div class="df-field">
-            <input type="text" name="${field.$xssName}" class="form-field number help-icon" />
+            <input type="text" name="${field.$xssName}" class="df-form-field df-number df-help-icon" />
         </div> 
         ${Render.getDescriptionTemplate(field)}
-        <div class="help-message"></div>
+        <div class="df-help-message"></div>
        `;
     this.element = fieldContainerElement.querySelector(`[name="${field.$xssName}"]`) as HTMLInputElement;
   }

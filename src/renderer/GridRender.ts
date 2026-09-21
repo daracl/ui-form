@@ -4,7 +4,7 @@ import { invalidMessage, resetRowElementStyleClass } from "@/util/validUtils";
 import { DaraForm } from "@/DaraForm";
 import * as utils from "@/util/utils";
 import { stringValidator } from "@/rule/stringValidator";
-import styleUtils from "@/util/styleUtils";
+import { resolveFieldStyle } from "@/util/styleUtils";
 import FormTemplate from "@/FormTemplate";
 import { FormOptions } from "@t/FormOptions";
 import { NumberKeyMap } from "@t/DataMap";
@@ -116,7 +116,7 @@ export default class GridRender extends Render {
 
     ++$$idx;
     let addColumns = [];
-    rowTemplate.push(`<tr class="grid-row">`);
+    rowTemplate.push(`<tr class="df-grid-row">`);
 
     rowTemplate.push("<td>");
     if (this.field.rendererOptions?.disableRemoveButton !== true) {
@@ -125,7 +125,7 @@ export default class GridRender extends Render {
     rowTemplate.push("</td>");
 
     for (const childField of this.field.children) {
-      let fieldStyle: FieldStyle = styleUtils.fieldStyle(options, childField, null, true);
+      let fieldStyle: FieldStyle = resolveFieldStyle(options, childField, null, true);
 
       let columnField = utils.merge({}, childField) as FormField;
 

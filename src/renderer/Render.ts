@@ -2,6 +2,7 @@ import { FormField } from "@t/FormField";
 import { ValidResult } from "@t/ValidResult";
 import { DaraForm } from "@/DaraForm";
 import * as utils from "@/util/utils";
+import { xss } from "@daracl/core";
 
 export abstract class Render {
   protected daraForm;
@@ -65,7 +66,10 @@ export abstract class Render {
   public setValueItems(value: any): void {}
 
   public static getDescriptionTemplate(field: FormField): string {
-    return field.description ? `<div class="df-description">${field.description}</div>` : "";
+    const classNames = field.descriptionClass ? utils.replaceXss(field.descriptionClass) : "";
+    const style = field.descriptionStyle ? 'style="' + utils.replaceXss(field.descriptionStyle) + '"' : "";
+
+    return field.description ? `<div class="df-description ${classNames}" ${style}>${field.description}</div>` : "";
   }
 
   public changeEventCall(field: FormField, e: Event | null, rederInfo: Render, fieldValue: any): boolean | undefined {
@@ -138,7 +142,7 @@ export abstract class Render {
   public setDescription(desc: string) {
     const descEle = this.rowElement.querySelector(".df-description");
     if (descEle) {
-      descEle.innerHTML = desc;
+      descEle.textContent = desc;
     } else {
       const fieldEle = this.rowElement.querySelector(".df-field");
       if (fieldEle) {

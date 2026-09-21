@@ -1,0 +1,23 @@
+// dark 테마 변수
+body.dark .daracl-form,
+.daracl-form.dark {
+  --border-color: #41444c;
+  --color-danger: #d9534f;
+  --background-danger: #d9534f;
+  --font-color: #b9bdc1;
+  --font-hover-color: #f5f3f3;
+  --invalid-font-color: #ff4136;
+  --invalid-border-color: #ffb6b4;
+  --invalid-background-color: #fdd;
+  --button-bg: #435ebe;
+  --button-bg-hover: #3950a2;
+  --tab-bg: #23418f;
+  --tab-bg-hover: #516db1;
+  --tooltip-background: #3e3e3e;
+  --tooltip-color: #fff;
+  --field-margin-top: 10px;
+  --input-bg: transparent;
+  --input-color: #c6cddb;
+  --input-disabled-bg: #878787;
+  --bg-grid-header: #878787;
+}

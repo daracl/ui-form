@@ -2,10 +2,11 @@ import { FormField, ValuesInfo } from "@t/FormField";
 import { Render } from "./Render";
 import * as utils from "@/util/utils";
 import { ValidResult } from "@t/ValidResult";
-import { RULES } from "@/constants";
+import { OrientationMap, RULES } from "@/constants";
 import { resetRowElementStyleClass, invalidMessage } from "@/util/validUtils";
 import { customChangeEventCall } from "@/event/renderEvents";
 import { DaraForm } from "@/DaraForm";
+import { orientationClassName } from "@/util/styleUtils";
 
 export default class CheckboxRender extends Render {
   private defaultCheckValue: any[] = [];
@@ -77,19 +78,19 @@ export default class CheckboxRender extends Render {
     const labelKey = Render.valuesLabelKey(field);
     const valueKey = Render.valuesValueKey(field);
 
-    templates.push(` <div class="df-field"><div class="field-group">`);
+    templates.push(` <div class="df-field"><div class="df-field-group">`);
     field.listItem?.list?.forEach((val) => {
       const checkVal = val[valueKey];
       templates.push(`
-          <span class="field ${field.listItem.orientation == "vertical" ? "vertical" : "horizontal"}">
+          <span class="df-field-item ${orientationClassName(field.listItem.orientation ?? OrientationMap.horizontal)}">
               <label>
-                  <input type="checkbox" name="${fieldName}" value="${checkVal ? utils.replaceXss(checkVal) : ""}" class="form-field checkbox" ${val.selected ? "checked" : ""} ${val.disabled ? "disabled" : ""}  />
+                  <input type="checkbox" name="${fieldName}" value="${checkVal ? utils.replaceXss(checkVal) : ""}" class="df-form-field df-checkbox" ${val.selected ? "checked" : ""} ${val.disabled ? "disabled" : ""}  />
                   ${Render.valuesLabelValue(labelKey, val)}
               </label>
           </span>
       `);
     });
-    templates.push(`<i class="daracl-icon help-icon"></i></div></div> ${Render.getDescriptionTemplate(field)}<div class="help-message"></div>`);
+    templates.push(`<i class="df-form-icon df-help-icon"></i></div></div> ${Render.getDescriptionTemplate(field)}<div class="df-help-message"></div>`);
 
     fieldContainerElement.innerHTML = templates.join("");
   }

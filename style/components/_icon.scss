@@ -1,0 +1,16 @@
+@mixin df-icon {
+  .df-icon {
+    display: inline-block;
+    width: 21px; /* 아이콘의 너비 설정 */
+    height: 21px; /* 아이콘의 높이 설정 */
+    vertical-align: middle;
+  }
+
+  .df-add-icon {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' height='20px' viewBox='0 -960 960 960' width='20px' fill='%235f6368'%3E%3Cpath d='M431-431H220.78v-98H431v-210.22h98V-529h210.22v98H529v210.22h-98V-431Z'/%3E%3C/svg%3E");
+  }
+
+  .df-remove-icon {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' height='20px' viewBox='0 -960 960 960' width='20px' fill='%235f6368'%3E%3Cpath d='M291-221.91 221.91-291l189-189-189-189L291-738.09l189 189 189-189L738.09-669l-189 189 189 189L669-221.91l-189-189-189 189Z'/%3E%3C/svg%3E");
+  }
+}

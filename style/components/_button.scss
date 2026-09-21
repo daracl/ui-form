@@ -1,0 +1,16 @@
+@mixin df-button {
+  .df-btn {
+    padding: 5px 10px;
+    border-radius: calc(0.45rem - 1px);
+    border: 1px solid var(--border-color);
+    background-color: var(--button-bg);
+
+    cursor: pointer;
+    transition: background-color 0.3s;
+
+    &:hover {
+      color: var(--font-hover-color);
+      background-color: var(--button-bg-hover);
+    }
+  }
+}

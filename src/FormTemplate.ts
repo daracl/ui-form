@@ -3,7 +3,7 @@ import { FieldStyle, FormField } from "@t/FormField";
 import * as utils from "./util/utils";
 import FieldInfoMap from "@/FieldInfoMap";
 
-import styleUtils from "./util/styleUtils";
+import { resolveFieldStyle } from "./util/styleUtils";
 import { DaraForm } from "./DaraForm";
 import TabRender from "./renderer/TabRender";
 import GridRender from "./renderer/GridRender";
@@ -56,12 +56,12 @@ export default class FormTemplate {
   public addRowTemplate(field: FormField): void {
     let labelHideFlag = this.isLabelHide(field);
 
-    let fieldStyle: FieldStyle = styleUtils.fieldStyle(this.options, field, null, labelHideFlag);
+    let fieldStyle: FieldStyle = resolveFieldStyle(this.options, field, null, labelHideFlag);
 
     this.addRowFieldInfo(field);
 
     const rowElement = utils.templateToElement(`
-        <div class="df-row form-group ${fieldStyle.fieldClass}" id="${field.$key}">
+        <div class="df-row df-form-group ${fieldStyle.fieldClass}" id="${field.$key}">
           ${labelHideFlag ? "" : `<div class="df-label ${fieldStyle.labelClass} ${fieldStyle.labelAlignClass}" title="${field.label ?? ""}" style="${fieldStyle.labelStyle}">${this.getLabelTemplate(field)}</div>`}
 
           <div class="df-field-container ${fieldStyle.valueClass} ${field.required ? "required" : ""}" style="${fieldStyle.valueStyle}"></div>
@@ -127,14 +127,14 @@ export default class FormTemplate {
 
       let labelTemplate = "";
       if (labelHideFlag) {
-        childFieldStyle = styleUtils.fieldStyle(this.options, childField, beforeField, !isEmptyLabel);
-        labelTemplate = isEmptyLabel ? `<span class="df-label empty ${childFieldStyle.labelClass}" style="${childFieldStyle.labelStyle}"></span>` : "";
+        childFieldStyle = resolveFieldStyle(this.options, childField, beforeField, !isEmptyLabel);
+        labelTemplate = isEmptyLabel ? `<span class="df-label df-empty ${childFieldStyle.labelClass}" style="${childFieldStyle.labelStyle}"></span>` : "";
       } else {
-        childFieldStyle = styleUtils.fieldStyle(this.options, childField, beforeField, false);
+        childFieldStyle = resolveFieldStyle(this.options, childField, beforeField, false);
         labelTemplate = `<span class="df-label ${childFieldStyle.labelClass} ${childFieldStyle.labelAlignClass}" title="${childField.label ?? ""}" style="${childFieldStyle.labelStyle}">${this.getLabelTemplate(childField)}</span>`;
       }
 
-      const groupElement = utils.templateToElement(`<div class="form-group ${childFieldStyle.fieldClass}" style="${childFieldStyle.fieldStyle}" id="${childField.$key}">
+      const groupElement = utils.templateToElement(`<div class="df-form-group ${childFieldStyle.fieldClass}" style="${childFieldStyle.fieldStyle}" id="${childField.$key}">
         ${labelTemplate}
         <span class="df-field-container ${childFieldStyle.valueClass} ${childField.required ? "required" : ""}" style="${childFieldStyle.valueStyle}"></span>
       </div>`);
@@ -165,7 +165,7 @@ export default class FormTemplate {
    */
   public getLabelTemplate(field: FormField) {
     const requiredTemplate = field.required ? `<span class="required"></span>` : "";
-    const tooltipTemplate = utils.isBlank(field.tooltip) ? "" : `<span class="df-tooltip">?<span class="tooltip">${field.tooltip}</span></span>`;
+    const tooltipTemplate = utils.isBlank(field.tooltip) ? "" : `<span class="df-tooltip">?<span class="df-tooltip-text">${field.tooltip}</span></span>`;
 
     return `${field.label ?? ""} ${tooltipTemplate} ${requiredTemplate}`;
   }

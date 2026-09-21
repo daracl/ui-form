@@ -30,10 +30,10 @@ export default class TextAreaRender extends Render {
 
     fieldContainerElement.innerHTML = `
         <div class="df-field">
-            <textarea name="${field.$xssName}" rows="${rows}" class="form-field textarea help-icon"></textarea>
+            <textarea name="${field.$xssName}" rows="${rows}" class="df-form-field df-textarea df-help-icon"></textarea>
         </div> 
         ${Render.getDescriptionTemplate(field)}
-        <div class="help-message"></div>
+        <div class="df-help-message"></div>
     `;
 
     this.element = fieldContainerElement.querySelector(`[name="${field.$xssName}"]`) as HTMLTextAreaElement;

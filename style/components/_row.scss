@@ -1,0 +1,88 @@
+@use "sass:list";
+@use "../abstracts" as *;
+
+@mixin df-row {
+  .df-row {
+    display: -ms-flexbox;
+    display: -webkit-box;
+    display: flex;
+    -ms-flex: 0 1 auto;
+    -webkit-box-flex: 0;
+    flex: 0 1 auto;
+    -ms-flex-direction: row;
+    -webkit-box-orient: horizontal;
+    -webkit-box-direction: normal;
+    flex-direction: row;
+    -ms-flex-wrap: wrap;
+    flex-wrap: wrap;
+
+    &.df-vertical {
+      display: block;
+    }
+
+    &.df-horizontal {
+      -webkit-box-flex: 0;
+      -ms-flex: 0 0 auto;
+      flex: 0 0 auto;
+      width: auto;
+      max-width: none;
+
+      > .df-form-group {
+        > .df-empty {
+          display: none !important;
+        }
+
+        & + .df-form-group {
+          margin-left: 10px !important;
+        }
+      }
+    }
+
+    @include rowFlex();
+  }
+
+  @each $size in $sizes {
+    $i: list.index($sizes, $size);
+    $className: ".df-col-xs-#{$i}";
+    #{$className} {
+      flex-basis: $size;
+      -webkit-box-flex: 0;
+      -ms-flex: 0 0 $size;
+      flex: 0 0 $size;
+      max-width: $size;
+    }
+  }
+
+  .df-align-items-center {
+    -webkit-box-align: center !important;
+    -ms-flex-align: center !important;
+    align-items: center !important;
+  }
+
+  .df-col-xs {
+    -webkit-flex-grow: 1;
+    -ms-flex-positive: 1;
+    -webkit-box-flex: 1;
+    flex-grow: 1;
+    -ms-flex-preferred-size: 0;
+    flex-basis: 0;
+    max-width: 100%;
+  }
+
+  .df-col-auto {
+    -webkit-box-flex: 0;
+    -ms-flex: 0 0 auto;
+    flex: 0 0 auto;
+    width: auto;
+    max-width: none;
+  }
+
+  .df-col-fix {
+    flex: none;
+  }
+
+  .df-col-full {
+    flex: 1;
+    overflow: auto;
+  }
+}

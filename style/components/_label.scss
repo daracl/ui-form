@@ -1,0 +1,57 @@
+@mixin df-label {
+  .df-label {
+    position: relative;
+    font-weight: 700;
+    vertical-align: top;
+    padding: 5px 15px 0px 0px;
+    overflow: initial;
+    // 확인할것.
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    word-break: break-all;
+
+    .required {
+      &::after {
+        content: "*";
+        vertical-align: middle;
+      }
+
+      color: var(--color-danger);
+    }
+
+    .df-tooltip {
+      visibility: visible;
+      color: var(--tooltip-color);
+      background: var(--tooltip-background);
+      width: 16px;
+      height: 16px;
+      border-radius: 8px;
+      text-align: center;
+      line-height: 16px;
+      margin: 0 5px;
+      font-size: 12px;
+      cursor: help;
+      position: relative;
+      display: inline-block;
+
+      .df-tooltip-text {
+        display: none;
+        text-align: initial;
+        background: var(--tooltip-background);
+        border-radius: 5px;
+        color: var(--tooltip-color);
+        padding: 10px 5px;
+        position: absolute;
+        z-index: 2;
+        left: -10px;
+        min-width: max-content;
+        text-shadow: none;
+        cursor: default;
+      }
+
+      &:hover .df-tooltip-text {
+        display: block;
+      }
+    }
+  }
+}

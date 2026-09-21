@@ -1,36 +1,38 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta charset="utf-8" />
-    <title>Dara Form</title>
-  </head>
 
-  <body>
-    <div class="header">
-      <div class="form-button">
-        <button type="button" onclick="formObj.addItem()">Add</button>
-        <button type="button" onclick="formObj.getValue()">getValue</button>
-        <button type="button" onclick="formObj.getValuePromise()">getValue(true)</button>
-        <button type="button" onclick="formObj.setValue()">setValue()</button>
-        <button type="button" onclick="formBuilder.isValidForm()">valid check</button>
-        <button type="button" onclick="formBuilder.resetForm()">Reset</button>
-        <button type="button" onclick="formBuilder.setFieldItems()">setFieldItems</button>
-      </div>
+<head>
+  <meta charset="utf-8" />
+  <title>Dara Form</title>
+</head>
 
-      <div>
-        Theme : <label>Light<input type="radio" name="theme-toggle" value="light" checked="true" /></label>
-        <label>Dark<input type="radio" name="theme-toggle" value="dark" /></label>
-      </div>
+<body>
+  <div class="header">
+    <div class="form-button">
+      <button type="button" onclick="formObj.addItem()">Add</button>
+      <button type="button" onclick="formObj.getValue()">getValue</button>
+      <button type="button" onclick="formObj.getValuePromise()">getValue(true)</button>
+      <button type="button" onclick="formObj.setValue()">setValue()</button>
+      <button type="button" onclick="formBuilder.isValidForm()">valid check</button>
+      <button type="button" onclick="formBuilder.resetForm()">Reset</button>
+      <button type="button" onclick="formBuilder.setFieldItems()">setFieldItems</button>
     </div>
 
-    <div style="padding: 0px 20px">
-      <form id="loginForm" class="login-form"></form>
-
-      <form id="formArea" class="test-form aaa-test"></form>
+    <div>
+      Theme : <label>Light<input type="radio" name="theme-toggle" value="light" checked="true" /></label>
+      <label>Dark<input type="radio" name="theme-toggle" value="dark" /></label>
     </div>
+  </div>
 
-    <div id="treeTest"></div>
-  </body>
+  <div style="padding: 0px 20px">
+    <form id="loginForm" class="login-form"></form>
+
+    <form id="formArea" class="test-form aaa-test"></form>
+  </div>
+
+  <div id="treeTest"></div>
+</body>
+
 </html>
 
 <script type="module" src="/src/index.ts"></script>
@@ -244,6 +246,7 @@
       {
         name: "sex",
         label: "Radio",
+        description: "description . description",
         required: true,
         renderType: "radio",
         listItem: {

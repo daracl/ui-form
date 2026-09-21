@@ -74,25 +74,30 @@ export type PASSWORD_TYPE = "number" | "upper" | "upper-special" | "upper-specia
 
 export type FIELD_POSITION = "top" | "left" | "left-left" | "left-right" | "right" | "right-left" | "right-right" | "bottom";
 
-export type ORIENTATION_TYPE = "horizontal" | "vertical";
+export const OrientationMap = {
+  horizontal: "horizontal",
+  vertical: "vertical",
+} as const;
+
+export type OrientationType = (typeof OrientationMap)[keyof typeof OrientationMap];
 
 interface StringArrayMap {
   [key: string]: string[];
 }
 
 export const FIELD_POSITION_STYLE: StringArrayMap = {
-  "top-left": ["top", "txt-left"],
-  "top-center": ["top", "txt-center"],
-  "top-right": ["top", "txt-right"],
-  "left-left": ["", "txt-left"],
-  "left-center": ["", "txt-center"],
-  "left-right": ["", "txt-right"],
-  "right-right": ["right", "txt-right"],
-  "right-center": ["right", "txt-center"],
-  "right-left": ["right", "txt-left"],
-  "bottom-left": ["bottom", "txt-left"],
-  "bottom-center": ["bottom", "txt-center"],
-  "bottom-right": ["bottom", "txt-right"],
+  "top-left": ["top", "df-txt-left"],
+  "top-center": ["top", "df-txt-center"],
+  "top-right": ["top", "df-txt-right"],
+  "left-left": ["", "df-txt-left"],
+  "left-center": ["", "df-txt-center"],
+  "left-right": ["", "df-txt-right"],
+  "right-right": ["right", "df-txt-right"],
+  "right-center": ["right", "df-txt-center"],
+  "right-left": ["right", "df-txt-left"],
+  "bottom-left": ["bottom", "df-txt-left"],
+  "bottom-center": ["bottom", "df-txt-center"],
+  "bottom-right": ["bottom", "df-txt-right"],
 };
 FIELD_POSITION_STYLE["top"] = FIELD_POSITION_STYLE["top-left"];
 FIELD_POSITION_STYLE["right"] = FIELD_POSITION_STYLE["right-right"];

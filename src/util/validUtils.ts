@@ -10,7 +10,7 @@ export const invalidMessage = (field: FormField, rowElement: Element, validResul
       rowElement.classList.add("valid");
     }
 
-    const helpMessageElement = rowElement.querySelector(".help-message");
+    const helpMessageElement = rowElement.querySelector(".df-help-message");
     if (helpMessageElement) {
       helpMessageElement.innerHTML = "";
     }
@@ -31,7 +31,7 @@ export const invalidMessage = (field: FormField, rowElement: Element, validResul
       message.push(validResult.message);
     }
 
-    const helpMessageElement = rowElement.querySelector(".help-message");
+    const helpMessageElement = rowElement.querySelector(".df-help-message");
     if (helpMessageElement && message.length > 0) {
       const msgHtml: string[] = [];
       message.forEach((item) => {

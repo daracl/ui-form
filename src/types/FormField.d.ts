@@ -1,5 +1,5 @@
 import { DaraForm } from "@/DaraForm";
-import { RENDER_TYPE, REGEXP_TYPE, TEXT_ALIGN_TYPE, FIELD_POSITION, ORIENTATION_TYPE } from "@/constants";
+import { RENDER_TYPE, REGEXP_TYPE, TEXT_ALIGN_TYPE, FIELD_POSITION, OrientationType } from "@/constants";
 import { Render } from "@/renderer/Render";
 
 export interface OptionCallback {
@@ -10,7 +10,7 @@ export interface ValuesInfo {
   labelField: string;
   valueField: string;
   list: any[];
-  orientation: ORIENTATION_TYPE;
+  orientation: OrientationType;
 }
 
 /**
@@ -63,7 +63,7 @@ export interface FieldStyle {
  */
 export interface FormField {
   name: string; // 'name'
-  displayMode?: 'edit' | 'view'; // 'edit'
+  displayMode?: "edit" | "view"; // 'edit'
   renderType?: RENDER_TYPE | string;
   label: string; // '이름'
   position?: FIELD_POSITION; // 'top'
@@ -79,8 +79,10 @@ export interface FormField {
   tooltip: string; // 툴팁 문구
   disabled?: boolean; // disabled
   description: string; // 설명
+  descriptionClass?: string;
+  descriptionStyle?: string;
   placeholder: string; // input , textarea 문구
-  orientation: ORIENTATION_TYPE; // children에 사용
+  orientation: OrientationType; // children에 사용
   required?: boolean; //true // 필수 여부
   regexpType?: REGEXP_TYPE; // 정규식 타입
   rule: {
@@ -112,7 +114,7 @@ export interface FormField {
   fileDownload: OptionCallback; // file download function
   renderer: Render; // custom renderer
   conditional: ConditionInfo; // 보이기 여부
-  rendererOptions: any| GridOptions;  // custom options 옵션
+  rendererOptions: any | GridOptions; // custom options 옵션
   $renderType: Render; // render Type
   $instance: Render; // 실제 render
   $orgin: FormField;
@@ -123,7 +125,6 @@ export interface FormField {
   $tabForm?: DaraForm; //tab 일경우 폼 정보
   $validName: string; //
 }
-
 
 export interface GridOptions {
   disableAddButton?: boolean; // renderer 그리드 타입 추가 버튼 유무

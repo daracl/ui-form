@@ -1,0 +1,9 @@
+@mixin df-field-group {
+  .df-field-group {
+    .df-field-item.df-vertical {
+      > * {
+        display: block;
+      }
+    }
+  }
+}

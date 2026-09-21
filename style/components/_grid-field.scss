@@ -1,0 +1,121 @@
+@mixin df-grid-field {
+  .df-grid-field {
+    margin-right: 10px;
+    .df-grid-btn-area {
+      border: 1px solid var(--border-color);
+      padding: 3px;
+    }
+
+    .df-grid-container {
+      width: 100%;
+      height: auto;
+      overflow-y: auto;
+      border: 1px solid var(--border-color);
+
+      .df-btn {
+        padding: 3px 5px;
+      }
+
+      .df-grid {
+        width: 100%;
+        border-top-width: 0px;
+        border-collapse: collapse;
+
+        > thead {
+          th {
+            position: sticky;
+            top: 0px;
+            z-index: 10;
+            border-bottom: 1px solid var(--border-color);
+            background-color: var(--bg-grid-header);
+            text-align: center;
+          }
+        }
+
+        .df-help-message {
+          display: none;
+        }
+
+        td,
+        th {
+          padding: 3px 5px;
+        }
+
+        .df-help-icon {
+          background-repeat: no-repeat;
+          background-position-y: center;
+
+          &.df-form-field {
+            background-position-x: calc(100% - 15px);
+          }
+
+          &.df-form-icon {
+            display: none;
+            position: absolute;
+            z-index: 1;
+            top: 0px;
+            right: 0px;
+            height: 100%;
+            width: 20px;
+            margin-right: 15px;
+          }
+        }
+
+        .df-grid-column {
+          position: relative;
+        }
+
+        .invalid {
+          .df-form-field {
+            border-color: var(--invalid-border-color);
+            outline-color: var(--invalid-border-color);
+          }
+
+          > .df-grid-column.required .df-field .df-help-icon {
+            display: block;
+            background-image: url("data:image/svg+xml; base64, PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIGhlaWdodD0iMjAiIHZpZXdCb3g9IjAgLTk2MCA5NjAgOTYwIiB3aWR0aD0iMjAiPjxwYXRoIGQ9Im0yNDktMjA3LTQyLTQyIDIzMS0yMzEtMjMxLTIzMSA0Mi00MiAyMzEgMjMxIDIzMS0yMzEgNDIgNDItMjMxIDIzMSAyMzEgMjMxLTQyIDQyLTIzMS0yMzEtMjMxIDIzMVoiIHN0eWxlPSImIzEwOyAgICBmaWxsOiAjZmY3MzczOyYjMTA7Ii8+PC9zdmc+");
+          }
+
+          .df-help-message {
+            display: block;
+            position: absolute;
+            border: 1px solid var(--invalid-border-color);
+            border-color: var(--invalid-border-color) transparent transparent transparent;
+            top: calc(100% + 6px);
+            left: 50%;
+            transform: translateX(-50%);
+            min-width: 270px;
+            padding: 5px 5px;
+            border-radius: 0.4rem;
+            z-index: 2;
+            background-color: var(--invalid-background-color);
+            color: var(--invalid-font-color);
+            &::after {
+              content: "";
+              position: absolute;
+              top: 0;
+              left: 50%;
+              width: 0;
+              height: 0;
+              border: 7px solid transparent;
+              border-bottom-color: var(--invalid-border-color);
+              border-top: 0;
+              border-left: 0;
+              margin-left: -3.5px;
+              margin-top: -7px;
+            }
+          }
+        }
+
+        .valid {
+          > .df-grid-column.required {
+            .df-field .df-help-icon {
+              display: block;
+              background-image: url("data:image/svg+xml; base64, PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgLTk2MCA5NjAgOTYwIiB3aWR0aD0iMjAiIGhlaWdodD0iMjAiIHN0eWxlPSImIzEwOyAgICBmaWxsOiAjMTlhOTc0OyYjMTA7Ij48cGF0aCBkPSJNMzc4LTI0NiAxNTQtNDcwbDQzLTQzIDE4MSAxODEgMzg0LTM4NCA0MyA0My00MjcgNDI3WiIvPjwvc3ZnPg==");
+            }
+          }
+        }
+      }
+    }
+  }
+}

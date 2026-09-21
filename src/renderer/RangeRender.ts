@@ -12,7 +12,7 @@ export default class RangeRender extends Render {
   constructor(field: FormField, rowElement: HTMLElement, daraForm: DaraForm) {
     super(daraForm, field, rowElement);
 
-    this.rangeNumElement = rowElement.querySelector(".range-num") as Element;
+    this.rangeNumElement = rowElement.querySelector(".df-range-num") as Element;
 
     this.mounted();
     this.setDefaultOption();
@@ -36,11 +36,11 @@ export default class RangeRender extends Render {
 
     fieldContainerElement.innerHTML = `
         <div class="df-field">
-            <span class="range-num">${field.defaultValue ? field.defaultValue : 0}</span>
-            <input type="range" name="${field.$xssName}" class="form-field range help-icon" min="${field.rule.minimum}" max="${field.rule.maximum}"/>
+            <span class="df-range-num">${field.defaultValue ? field.defaultValue : 0}</span>
+            <input type="range" name="${field.$xssName}" class="df-form-field df-range df-help-icon" min="${field.rule.minimum}" max="${field.rule.maximum}"/>
         </div> 
         ${Render.getDescriptionTemplate(field)}
-        <div class="help-message"></div>
+        <div class="df-help-message"></div>
        `;
 
     this.element = fieldContainerElement.querySelector(`[name="${field.$xssName}"]`) as HTMLInputElement;

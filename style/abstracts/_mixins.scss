@@ -1,0 +1,22 @@
+@mixin rowFlex() {
+  &.df-top {
+    flex-direction: column;
+    > div {
+      max-width: 100% !important;
+    }
+  }
+
+  &.df-right {
+    -ms-flex-direction: row-reverse !important;
+    -webkit-box-orient: horizontal !important;
+    -webkit-box-direction: reverse !important;
+    flex-direction: row-reverse !important;
+  }
+
+  &.df-bottom {
+    flex-direction: column-reverse !important;
+    > div {
+      max-width: 100% !important;
+    }
+  }
+}

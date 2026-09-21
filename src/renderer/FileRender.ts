@@ -53,17 +53,17 @@ export default class FileRender extends Render {
 
     fieldContainerElement.innerHTML = `
     <div class="df-field">
-      <span class="file-wrapper">
-        <label class="file-label">
-          <input type="file" name="${field.$xssName}" class="form-field file" multiple />
+      <span class="df-file-wrapper">
+        <label class="df-file-label">
+          <input type="file" name="${field.$xssName}" class="df-form-field df-file" multiple />
           ${Language.getMessage("fileButton")}
         </label>
-        <i class="daracl-icon help-icon"></i>
+        <i class="df-form-icon df-help-icon"></i>
       </span>
     </div>
     ${Render.getDescriptionTemplate(field)}
-    <div class="daracl-file-list"></div>
-    <div class="help-message"></div>
+    <div class="df-file-list"></div>
+    <div class="df-help-message"></div>
     `;
 
     this.element = fieldContainerElement.querySelector(`[name="${field.$xssName}"]`) as HTMLInputElement;
@@ -98,7 +98,7 @@ export default class FileRender extends Render {
   }
 
   private setFileList(fileList: FileInfo[], initFlag?: boolean | undefined) {
-    const fileListElement = this.rowElement.querySelector(".daracl-file-list");
+    const fileListElement = this.rowElement.querySelector(".df-file-list");
 
     if (fileListElement) {
       if (initFlag === true) {
@@ -109,9 +109,9 @@ export default class FileRender extends Render {
 
       fileList.forEach((file) => {
         fileTemplateHtml.push(`
-        <div class="file-item" data-seq="${file.$seq}">
-          ${file.fileId ? '<span class="file-icon download"></span>' : '<span class="file-icon"></span>'} <span class="file-icon remove"></span>
-          <span class="file-name">${file.fileName}</span > 
+        <div class="df-file-item" data-seq="${file.$seq}">
+          ${file.fileId ? '<span class="df-file-icon df-file-download"></span>' : '<span class="df-file-icon"></span>'} <span class="df-file-icon df-file-remove"></span>
+          <span class="df-file-name">${file.fileName}</span > 
         </div>`);
       });
 
@@ -131,10 +131,10 @@ export default class FileRender extends Render {
    * @param fileListElement
    */
   private downloadFileEvent(item: FileInfo, fileListElement: Element) {
-    const ele = fileListElement.querySelector(`[data-seq="${item.$seq}"] .download`);
+    const ele = fileListElement.querySelector(`[data-seq="${item.$seq}"] .df-file-download`);
     if (ele) {
       ele.addEventListener("click", (evt: Event) => {
-        const fileItemElement = (evt.target as Element).closest(".file-item");
+        const fileItemElement = (evt.target as Element).closest(".df-file-item");
 
         if (fileItemElement) {
           const attrSeq = fileItemElement.getAttribute("data-seq");
@@ -166,10 +166,10 @@ export default class FileRender extends Render {
    * @param fileListElement
    */
   private removeFileEvent(item: FileInfo, fileListElement: Element) {
-    const ele = fileListElement.querySelector(`[data-seq="${item.$seq}"] .remove`);
+    const ele = fileListElement.querySelector(`[data-seq="${item.$seq}"] .df-file-remove`);
     if (ele) {
       ele.addEventListener("click", (evt: Event) => {
-        const fileItemElement = (evt.target as Element).closest(".file-item");
+        const fileItemElement = (evt.target as Element).closest(".df-file-item");
 
         if (fileItemElement) {
           const attrSeq = fileItemElement.getAttribute("data-seq");

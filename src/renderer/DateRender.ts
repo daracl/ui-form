@@ -55,10 +55,10 @@ export default class DateRender extends Render {
 
     fieldContainerElement.innerHTML = `
     <div class="df-field">
-      <input type="text" name="${field.$xssName}" class="form-field text help-icon" autocomplete="off" readonly/>
+      <input type="text" name="${field.$xssName}" class="df-form-field df-text df-help-icon" autocomplete="off" readonly/>
      </div>
      ${Render.getDescriptionTemplate(field)}
-     <div class="help-message"></div>
+     <div class="df-help-message"></div>
      `;
 
     this.element = fieldContainerElement.querySelector(`[name="${field.$xssName}"]`) as HTMLInputElement;

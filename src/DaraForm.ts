@@ -324,14 +324,14 @@ export class DaraForm {
       tabItem?.remove();
       tabElement.querySelector(`[tab-panel-id="${fieldInfo.$key}"]`)?.remove();
 
-      const firstTabItem = tabElement.querySelector(".tab-header .tab-item");
+      const firstTabItem = tabElement.querySelector(".df-tab-header .df-tab-item");
       if (activeFlag && firstTabItem) {
         parentField.$instance.setActive(firstTabItem.getAttribute("data-tab-id") ?? "");
       }
       return;
     }
 
-    // 최상위 필드는 .df-row, group 하위 필드는 .form-group 에 id=$key 가 지정됨.
+    // 최상위 필드는 .df-row, group 하위 필드는 .df-form-group 에 id=$key 가 지정됨.
     const rowSelector = `[id="${fieldInfo.$key}"]`;
     let element = fieldInfo.$instance?.getElement();
 

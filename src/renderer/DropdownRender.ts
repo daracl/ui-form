@@ -59,11 +59,11 @@ export default class DropdownRender extends Render {
 
     const fieldContainerElement = this.rowElement.querySelector(".df-field-container") as HTMLElement;
 
-    let template = ` <div class="df-field"><select name="${field.$xssName}" class="form-field dropdown">
+    let template = ` <div class="df-field"><select name="${field.$xssName}" class="df-form-field df-dropdown">
           ${this.dropdownValuesTemplate(field)}
-          </select> <i class="help-icon"></i></div>
+          </select> <i class="df-help-icon"></i></div>
                 ${Render.getDescriptionTemplate(field)}
-      <div class="help-message"></div>
+      <div class="df-help-message"></div>
     `;
     fieldContainerElement.innerHTML = template;
 

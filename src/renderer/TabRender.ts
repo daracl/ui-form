@@ -4,7 +4,7 @@ import { invalidMessage } from "@/util/validUtils";
 import { stringValidator } from "@/rule/stringValidator";
 import { DaraForm } from "@/DaraForm";
 import FormTemplate from "@/FormTemplate";
-import styleUtils from "@/util/styleUtils";
+import { resolveFieldStyle } from "@/util/styleUtils";
 import { FormOptions } from "@t/FormOptions";
 import * as utils from "@/util/utils";
 
@@ -28,7 +28,7 @@ export default class TabRender extends Render {
       (this.customFunction.mounted as any).call(this, this.field, this.rowElement);
     }
 
-    this.tabContainerElement.querySelectorAll(".tab-item").forEach((tabItem) => {
+    this.tabContainerElement.querySelectorAll(".df-tab-item").forEach((tabItem) => {
       tabItem.addEventListener("click", (e: any) => {
         this.clickEventHandler(tabItem, e);
       });
@@ -94,11 +94,11 @@ export default class TabRender extends Render {
     const fieldContainerElement = this.rowElement.querySelector(".df-field-container") as HTMLElement;
 
     //tab 이벤트 처리 할것.
-    let fieldStyle = styleUtils.fieldStyle(options, field);
+    let fieldStyle = resolveFieldStyle(options, field);
 
     fieldContainerElement.innerHTML = `
         <div class="df-field ">
-          <div class="tab-header ${fieldStyle.tabAlignClass}"></div>
+          <div class="df-tab-header ${fieldStyle.tabAlignClass}"></div>
         </div>
         <div class="df-tab-body"></div>
     `;
@@ -108,17 +108,17 @@ export default class TabRender extends Render {
 
       const formOptions = this.getForm().getOptions();
 
-      let fieldStyle: FieldStyle = styleUtils.fieldStyle(formOptions, field, null, formTemplate.isLabelHide(field));
+      let fieldStyle: FieldStyle = resolveFieldStyle(formOptions, field, null, formTemplate.isLabelHide(field));
 
       for (const childField of field.children) {
         childField.$parent = field;
         formTemplate.addRowFieldInfo(childField);
         let id = childField.$key;
 
-        let tabTemplate = `<span class="tab-item ${firstFlag ? "active" : ""}" data-tab-id="${id}"><a href="javascript:;">${childField.label}</a></span>`;
+        let tabTemplate = `<span class="df-tab-item ${firstFlag ? "active" : ""}" data-tab-id="${id}"><a href="javascript:;">${childField.label}</a></span>`;
 
-        let tabBodyTemplate = `<div class="tab-panel ${firstFlag ? "active" : ""}" tab-panel-id="${id}">${Render.getDescriptionTemplate(childField)}
-          <div class="tab-group"></div>
+        let tabBodyTemplate = `<div class="df-tab-panel ${firstFlag ? "active" : ""}" tab-panel-id="${id}">${Render.getDescriptionTemplate(childField)}
+          <div class="df-tab-group"></div>
         </div>`;
 
         const tabElement = utils.templateToElement(tabTemplate);
@@ -126,7 +126,7 @@ export default class TabRender extends Render {
 
         firstFlag = false;
         if (tabElement) {
-          fieldContainerElement.querySelector(".tab-header")?.appendChild(tabElement);
+          fieldContainerElement.querySelector(".df-tab-header")?.appendChild(tabElement);
         }
 
         if (tabBodyElement) {
@@ -148,7 +148,7 @@ export default class TabRender extends Render {
 
             childField.$tabForm = new DaraForm(document.createElement("div"), tabFormOptions);
 
-            childField.$instance = new (childField.$renderType as any)(childField, tabBodyElement?.querySelector(".tab-group"), childField.$tabForm);
+            childField.$instance = new (childField.$renderType as any)(childField, tabBodyElement?.querySelector(".df-tab-group"), childField.$tabForm);
 
             childField.$tabForm.formTemplate.childTemplate(childField, fieldStyle);
           }

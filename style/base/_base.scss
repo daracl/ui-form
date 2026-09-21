@@ -1,0 +1,59 @@
+@mixin df-base {
+  padding: 0px;
+  margin-top: 8px;
+  color: var(--font-color);
+
+  *,
+  ::after,
+  ::before {
+    box-sizing: border-box;
+    line-height: 1.6em;
+  }
+
+  .df-txt {
+    &-left {
+      text-align: left;
+    }
+
+    &-center {
+      text-align: center;
+    }
+
+    &-right {
+      text-align: right;
+    }
+  }
+
+  &[data-df-mode="view"] {
+    .df-form-field {
+      border-width: 0px;
+      border-color: transparent;
+      outline: initial;
+
+      &:focus-visible,
+      &:focus {
+        border-width: 0px;
+      }
+    }
+  }
+
+  .df-hidden {
+    max-height: 0vh !important;
+    width: 0px;
+    visibility: collapse;
+    display: none !important;
+    padding: 0px !important;
+    margin: 0px !important;
+  }
+
+  input,
+  select,
+  textarea {
+    background-color: transparent;
+    color: var(--font-color);
+    &[disabled] {
+      background-color: var(--input-disabled-bg);
+      opacity: 0.8;
+    }
+  }
+}

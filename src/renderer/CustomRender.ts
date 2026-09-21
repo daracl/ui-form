@@ -41,7 +41,7 @@ export default class CustomRender extends Render {
         ${fieldTemplate}
         </div>
           ${Render.getDescriptionTemplate(field)}
-        <div class="help-message"></div>`;
+        <div class="df-help-message"></div>`;
   }
 
   getValue() {
