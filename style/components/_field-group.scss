@@ -5,6 +5,7 @@
 
     .df-field-item {
       padding-top: var(--field-padding-top);
+      padding-right: 8px;
       &.df-vertical {
         > * {
           display: block;
