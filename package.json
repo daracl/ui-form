@@ -1,6 +1,6 @@
 {
   "name": "@daracl/form",
-  "version": "0.0.19",
+  "version": "0.0.18",
   "sideEffects": false,
   "description": "Daracl form validation ",
   "author": {
@@ -123,6 +123,7 @@
     "clean:unmin": "rimraf dist/unmin",
     "copy-html": "cpx \"public/index.html\" dist",
     "copy-unmin": "cpx \"dist/unmin/**.*\" dist",
-    "copy-dts": "cpx \"src/**/*.d.ts\" dist"
+    "copy-dts": "cpx \"src/**/*.d.ts\" dist",
+    "prepublishOnly": "npm run build"
   }
 }

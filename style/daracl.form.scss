@@ -10,25 +10,13 @@
    ========================================================================== */
 $default-theme: themes.$default-theme;
 
-// Default theme
-.daracl-form {
-  @include themes.theme(map.get(themes.$themes, $default-theme));
-}
-
-// 그 외 테마: body.<name> 또는 .daracl-form.<name>
-@each $name, $theme-value in themes.$themes {
-  @if $name != $default-theme {
-    body.#{$name} .daracl-form,
-    .daracl-form.#{$name} {
-      @include themes.theme($theme-value);
-    }
-  }
-}
-
 /* ==========================================================================
    Common
    ========================================================================== */
 .daracl-form {
+  background: var(--body-bg);
+
+  @include themes.theme(map.get(themes.$themes, $default-theme));
   @include df-base;
   @include df-label;
   @include df-form-field;
@@ -41,4 +29,25 @@ $default-theme: themes.$default-theme;
   @include df-icon;
   @include df-form-group;
   @include df-grid-field;
+}
+
+// Global theme
+@each $name, $theme-value in themes.$themes {
+  @if $name != $default-theme {
+    [data-daracl-theme="#{$name}"] {
+      .daracl-form {
+        @include themes.theme($theme-value);
+      }
+    }
+  }
+}
+
+// 그 외 테마: body.<name> 또는 .daracl-form.<name>
+@each $name, $theme-value in themes.$themes {
+  @if $name != $default-theme {
+    body.#{$name} .daracl-form,
+    .daracl-form.#{$name} {
+      @include themes.theme($theme-value);
+    }
+  }
 }

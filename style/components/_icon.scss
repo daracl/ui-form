@@ -6,11 +6,21 @@
     vertical-align: middle;
   }
 
+  // 아이콘 색은 mask 로 잘라내고 --icon-color 테마 변수로 채운다.
+  .df-add-icon,
+  .df-remove-icon {
+    background-color: var(--icon-color);
+    -webkit-mask-repeat: no-repeat;
+    mask-repeat: no-repeat;
+  }
+
   .df-add-icon {
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' height='20px' viewBox='0 -960 960 960' width='20px' fill='%235f6368'%3E%3Cpath d='M431-431H220.78v-98H431v-210.22h98V-529h210.22v98H529v210.22h-98V-431Z'/%3E%3C/svg%3E");
+    -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' height='20px' viewBox='0 -960 960 960' width='20px'%3E%3Cpath d='M431-431H220.78v-98H431v-210.22h98V-529h210.22v98H529v210.22h-98V-431Z'/%3E%3C/svg%3E");
+    mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' height='20px' viewBox='0 -960 960 960' width='20px'%3E%3Cpath d='M431-431H220.78v-98H431v-210.22h98V-529h210.22v98H529v210.22h-98V-431Z'/%3E%3C/svg%3E");
   }
 
   .df-remove-icon {
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' height='20px' viewBox='0 -960 960 960' width='20px' fill='%235f6368'%3E%3Cpath d='M291-221.91 221.91-291l189-189-189-189L291-738.09l189 189 189-189L738.09-669l-189 189 189 189L669-221.91l-189-189-189 189Z'/%3E%3C/svg%3E");
+    -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' height='20px' viewBox='0 -960 960 960' width='20px'%3E%3Cpath d='M291-221.91 221.91-291l189-189-189-189L291-738.09l189 189 189-189L738.09-669l-189 189 189 189L669-221.91l-189-189-189 189Z'/%3E%3C/svg%3E");
+    mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' height='20px' viewBox='0 -960 960 960' width='20px'%3E%3Cpath d='M291-221.91 221.91-291l189-189-189-189L291-738.09l189 189 189-189L738.09-669l-189 189 189 189L669-221.91l-189-189-189 189Z'/%3E%3C/svg%3E");
   }
 }

@@ -1,20 +1,26 @@
 @use "sass:map";
 @use "./common" as *;
 
-// 기본(light) 테마
+// 기본(light) 테마 - ui-grid light 테마 색상 기준
 $theme: map.merge(
   $theme-common,
   (
-    border-color: #dfe1e5,
+    border-color: #cdcdcd,
     font-color: #686868,
     font-hover-color: #3a3d41,
-    button-bg: #f6f6f6,
-    button-bg-hover: #ebebeb,
+    font-disable-color: #ebebeb,
+    button-bg: #ffffff,
+    button-bg-hover: #e3e3e3,
     tab-bg: #f6f6f6,
     tab-bg-hover: #ebebeb,
     input-bg: #fff,
     input-color: #212529,
     input-disabled-bg: #ebebeb,
     bg-grid-header: #f1f1f1,
+    icon-color: #5f6368,
+
+    body-bg: #ffffff,
+    body-bg-thin: #f0f0f0,
+    body-bg-hover: #d2d2d2,
   )
 );
