@@ -3,7 +3,9 @@
     position: relative;
     font-weight: 700;
     vertical-align: top;
-    padding: 5px 15px 0px 0px;
+
+    padding-top: var(--field-padding-top);
+    padding-right: var(--field-padding-right);
     overflow: initial;
     // 확인할것.
     white-space: nowrap;

@@ -1,8 +1,14 @@
 @mixin df-field-group {
   .df-field-group {
-    .df-field-item.df-vertical {
-      > * {
-        display: block;
+    display: flex;
+    align-items: center;
+
+    .df-field-item {
+      padding-top: var(--field-padding-top);
+      &.df-vertical {
+        > * {
+          display: block;
+        }
       }
     }
   }

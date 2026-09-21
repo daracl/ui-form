@@ -1,2 +1,14 @@
-@forward "./light";
-@forward "./dark";
+@use "light";
+@use "dark";
+
+@forward "mixin";
+@forward "common";
+
+// 테마 추가시 아래 map 에 추가할 것.
+$themes: (
+  light: light.$theme,
+  dark: dark.$theme,
+);
+
+// 기본 테마 설정
+$default-theme: light;

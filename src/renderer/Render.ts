@@ -2,7 +2,6 @@ import { FormField } from "@t/FormField";
 import { ValidResult } from "@t/ValidResult";
 import { DaraForm } from "@/DaraForm";
 import * as utils from "@/util/utils";
-import { xss } from "@daracl/core";
 
 export abstract class Render {
   protected daraForm;

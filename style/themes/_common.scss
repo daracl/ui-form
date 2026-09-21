@@ -1,0 +1,13 @@
+// 모든 테마에서 값이 같은 변수. 테마별 값이 필요하면 각 테마 파일에서 override 한다.
+$theme-common: (
+  color-danger: #d9534f,
+  background-danger: #d9534f,
+  invalid-font-color: #ff4136,
+  invalid-border-color: #ffb6b4,
+  invalid-background-color: #fdd,
+  tooltip-background: #3e3e3e,
+  tooltip-color: #fff,
+  field-margin-top: 10px,
+  field-padding-top: 5px,
+  field-padding-right: 15px,
+);

@@ -1,0 +1,6 @@
+// 테마 map 을 CSS 변수(--key: value)로 출력한다.
+@mixin theme($theme) {
+  @each $key, $value in $theme {
+    --#{$key}: #{$value};
+  }
+}

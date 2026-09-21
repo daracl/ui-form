@@ -1,9 +1,33 @@
 // Entry point: 각 파일은 mixin 만 정의하고, .daracl-form 스코프는 여기서 한 번만 감싼다.
-// 출력 순서가 기존 CSS 와 동일하도록 themes -> base -> components 순으로 include 한다.
+// 출력 순서가 기존 CSS 와 동일하도록 theme -> base -> components 순으로 include 한다.
+@use "sass:map";
 @use "themes";
 @use "base" as *;
 @use "components" as *;
 
+/* ==========================================================================
+   Theme
+   ========================================================================== */
+$default-theme: themes.$default-theme;
+
+// Default theme
+.daracl-form {
+  @include themes.theme(map.get(themes.$themes, $default-theme));
+}
+
+// 그 외 테마: body.<name> 또는 .daracl-form.<name>
+@each $name, $theme-value in themes.$themes {
+  @if $name != $default-theme {
+    body.#{$name} .daracl-form,
+    .daracl-form.#{$name} {
+      @include themes.theme($theme-value);
+    }
+  }
+}
+
+/* ==========================================================================
+   Common
+   ========================================================================== */
 .daracl-form {
   @include df-base;
   @include df-label;

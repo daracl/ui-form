@@ -1,22 +1,20 @@
-// 기본(light) 테마 변수
-.daracl-form {
-  --border-color: #dfe1e5;
-  --color-danger: #d9534f;
-  --background-danger: #d9534f;
-  --font-color: #686868;
-  --font-hover-color: #3a3d41;
-  --invalid-font-color: #ff4136;
-  --invalid-border-color: #ffb6b4;
-  --invalid-background-color: #fdd;
-  --button-bg: #f6f6f6;
-  --button-bg-hover: #ebebeb;
-  --tab-bg: #f6f6f6;
-  --tab-bg-hover: #ebebeb;
-  --tooltip-background: #3e3e3e;
-  --tooltip-color: #fff;
-  --field-margin-top: 10px;
-  --input-bg: #fff;
-  --input-color: #212529;
-  --input-disabled-bg: #ebebeb;
-  --bg-grid-header: #f1f1f1;
-}
+@use "sass:map";
+@use "./common" as *;
+
+// 기본(light) 테마
+$theme: map.merge(
+  $theme-common,
+  (
+    border-color: #dfe1e5,
+    font-color: #686868,
+    font-hover-color: #3a3d41,
+    button-bg: #f6f6f6,
+    button-bg-hover: #ebebeb,
+    tab-bg: #f6f6f6,
+    tab-bg-hover: #ebebeb,
+    input-bg: #fff,
+    input-color: #212529,
+    input-disabled-bg: #ebebeb,
+    bg-grid-header: #f1f1f1,
+  )
+);
