@@ -136,6 +136,30 @@ export class DaraForm {
   public changeMode = (mode: FORM_MODE): void => {
     this.options.mode = mode;
     this.formElement.setAttribute("data-df-mode", mode);
+
+    const fields = this.formElement.querySelectorAll<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>(".df-field input, " + ".df-field textarea, " + ".df-field select");
+
+    if (mode == "view") {
+      fields.forEach((field) => {
+        if (field instanceof HTMLInputElement) {
+          field.readOnly = true;
+        }
+
+        if (field instanceof HTMLTextAreaElement) {
+          field.readOnly = true;
+        }
+      });
+    } else {
+      fields.forEach((field) => {
+        if (field instanceof HTMLInputElement) {
+          field.readOnly = false;
+        }
+
+        if (field instanceof HTMLTextAreaElement) {
+          field.readOnly = false;
+        }
+      });
+    }
   };
 
   /**

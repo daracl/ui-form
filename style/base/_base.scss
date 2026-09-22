@@ -26,14 +26,21 @@
   }
 
   &[data-df-mode="view"] {
-    .df-form-field {
-      border-width: 0px;
-      border-color: transparent;
-      outline: initial;
+    .df-field {
+      input[type="text"],
+      input[type="password"],
+      input[type="email"],
+      input[type="number"],
+      input[type="tel"],
+      textarea {
+        user-select: text;
+      }
 
-      &:focus-visible,
-      &:focus {
-        border-width: 0px;
+      input[type="checkbox"],
+      input[type="radio"],
+      label,
+      select {
+        pointer-events: none;
       }
     }
   }
