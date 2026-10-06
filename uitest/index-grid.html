@@ -1,34 +1,36 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta charset="utf-8" />
-    <title>Dara Form</title>
-  </head>
 
-  <body>
-    <div class="header">
-      <div class="form-button">
-        <button type="button" onclick="formObj.addItem()">Add</button>
-        <button type="button" onclick="formObj.getValue()">getValue</button>
-        <button type="button" onclick="formObj.getValuePromise()">getValue(true)</button>
-        <button type="button" onclick="formObj.setValue()">setValue()</button>
-        <button type="button" onclick="formObj.isValidForm()">valid check</button>
-        <button type="button" onclick="formObj.resetForm()">Reset</button>
-        <button type="button" onclick="formObj.setFieldItems()">setFieldItems</button>
-      </div>
+<head>
+  <meta charset="utf-8" />
+  <title>Dara Form</title>
+</head>
 
-      <div>
-        Theme : <label>Light<input type="radio" name="theme-toggle" value="light" checked="true" /></label>
-        <label>Dark<input type="radio" name="theme-toggle" value="dark" /></label>
-      </div>
+<body>
+  <div class="header">
+    <div class="form-button">
+      <button type="button" onclick="formObj.addItem()">Add</button>
+      <button type="button" onclick="formObj.getValue()">getValue</button>
+      <button type="button" onclick="formObj.getValuePromise()">getValue(true)</button>
+      <button type="button" onclick="formObj.setValue()">setValue()</button>
+      <button type="button" onclick="formObj.isValidForm()">valid check</button>
+      <button type="button" onclick="formObj.resetForm()">Reset</button>
+      <button type="button" onclick="formObj.setFieldItems()">setFieldItems</button>
     </div>
 
-    <div style="padding: 0px 20px">
-      <form id="loginForm" class="login-form"></form>
-
-      <form id="formArea" class="test-form aaa-test"></form>
+    <div>
+      Theme : <label>Light<input type="radio" name="theme-toggle" value="light" checked="true" /></label>
+      <label>Dark<input type="radio" name="theme-toggle" value="dark" /></label>
     </div>
-  </body>
+  </div>
+
+  <div style="padding: 0px 20px">
+    <form id="loginForm" class="login-form"></form>
+
+    <form id="formArea" class="test-form aaa-test"></form>
+  </div>
+</body>
+
 </html>
 
 <script type="module" src="/src/index.ts"></script>
@@ -150,10 +152,10 @@
         name: "grid",
         label: "grid",
         renderType: "grid",
-        displayMode: "view",
+        //displayMode: "view",
         rendererOptions: {
-          disableAddButton: true,
-          disableRemoveButton: true,
+          //disableAddButton: true,
+          //disableRemoveButton: true,
           height: "200px",
         },
         children: [

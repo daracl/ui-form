@@ -173,7 +173,7 @@ export default class GridRender extends Render {
     const rowElement = target.closest("tr");
 
     if (rowElement) {
-      if (rowElement.parentElement?.childElementCount == 1) return;
+      //if (rowElement.parentElement?.childElementCount == 1) return;
 
       let rowIdx = (evt.currentTarget as Element)?.getAttribute("data-row-idx") || "-1";
 
@@ -188,6 +188,8 @@ export default class GridRender extends Render {
    */
   removeFieldInfo(rowIdx?: string) {
     let removeFieldArrs = [] as any;
+
+    console.log("rowIdx : ", rowIdx);
     if (utils.isEmpty(rowIdx)) {
       for (let key in this.allAddRowInfo) {
         removeFieldArrs = removeFieldArrs.concat(this.allAddRowInfo[key]);
