@@ -7,7 +7,8 @@
   ::after,
   ::before {
     box-sizing: border-box;
-    line-height: 1.6em;
+    line-height: var(--line-height);
+    font-size: var(--font-size);
     color: var(--font-color);
   }
 

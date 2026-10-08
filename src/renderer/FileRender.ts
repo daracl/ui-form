@@ -109,7 +109,7 @@ export default class FileRender extends Render {
       fileList.forEach((file) => {
         fileTemplateHtml.push(`
         <div class="df-file-item" data-seq="${file.$seq}">
-          ${file.fileId ? '<span class="df-file-icon df-file-download"></span>' : '<span class="df-file-icon"></span>'} <span class="df-file-icon df-file-remove"></span>
+          ${file.fileId ? '<span class="df-file-icon df-file-download"></span>' : '<span class="df-file-icon df-empty-icon"></span>'} <span class="df-file-icon df-file-remove"></span>
           <span class="df-file-name">${file.fileName}</span > 
         </div>`);
       });

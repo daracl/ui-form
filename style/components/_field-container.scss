@@ -27,7 +27,7 @@
         width: 100%;
         padding: 0.375rem 0.75rem;
         font-weight: 400;
-        line-height: 1.5;
+        line-height: var(--line-height-lg);
         background-clip: padding-box;
         border-radius: 4px;
         transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
@@ -36,6 +36,7 @@
 
     .df-description {
       padding: 3px 0px 0px;
+      font-size: var(--font-size-sm);
     }
   }
 }

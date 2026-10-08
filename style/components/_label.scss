@@ -1,24 +1,29 @@
 @mixin df-label {
   .df-label {
     position: relative;
-    font-weight: 700;
     vertical-align: top;
-
-    padding-top: var(--field-padding-top);
     padding-right: var(--field-padding-right);
-    overflow: initial;
-    // 확인할것.
-    white-space: nowrap;
-    text-overflow: ellipsis;
-    word-break: break-all;
+    display: flex;
+    align-items: center;
 
     .required {
+      color: var(--color-danger);
+      display: inline-block;
+      vertical-align: middle;
+
       &::after {
+        color: var(--color-danger);
         content: "*";
         vertical-align: middle;
       }
+    }
 
-      color: var(--color-danger);
+    .df-label-text {
+      min-width: 0;
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      line-height: initial;
     }
 
     .df-tooltip {
@@ -29,12 +34,13 @@
       height: 16px;
       border-radius: 8px;
       text-align: center;
-      line-height: 16px;
+      line-height: var(--line-height-lg);
       margin: 0 5px;
       font-size: 12px;
       cursor: help;
       position: relative;
       display: inline-block;
+      flex-shrink: 0;
 
       .df-tooltip-text {
         display: none;

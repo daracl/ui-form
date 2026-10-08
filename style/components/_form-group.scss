@@ -59,7 +59,11 @@
 
       .df-help-message {
         display: block;
-        color: var(--invalid-font-color);
+        > * {
+          color: var(--invalid-font-color);
+          font-size: var(--font-size-sm);
+          padding: 3px 0px;
+        }
       }
     }
 

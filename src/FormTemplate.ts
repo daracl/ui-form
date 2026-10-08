@@ -167,7 +167,7 @@ export default class FormTemplate {
     const requiredTemplate = field.required ? `<span class="required"></span>` : "";
     const tooltipTemplate = utils.isBlank(field.tooltip) ? "" : `<span class="df-tooltip">?<span class="df-tooltip-text">${field.tooltip}</span></span>`;
 
-    return `${field.label ?? ""} ${tooltipTemplate} ${requiredTemplate}`;
+    return `<span class="df-label-text">${field.label ?? ""}</span> ${tooltipTemplate} ${requiredTemplate}`;
   }
 
   /**
