@@ -1,6 +1,6 @@
 {
   "name": "@daracl/form",
-  "version": "0.0.19",
+  "version": "0.0.20",
   "sideEffects": false,
   "description": "Daracl form validation ",
   "author": {

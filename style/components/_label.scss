@@ -4,7 +4,7 @@
     vertical-align: top;
     padding-right: var(--field-padding-right);
     display: flex;
-    align-items: center;
+    align-items: flex-start;
 
     .required {
       color: var(--color-danger);
