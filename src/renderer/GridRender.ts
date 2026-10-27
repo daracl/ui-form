@@ -189,7 +189,6 @@ export default class GridRender extends Render {
   removeFieldInfo(rowIdx?: string) {
     let removeFieldArrs = [] as any;
 
-    console.log("rowIdx : ", rowIdx);
     if (utils.isEmpty(rowIdx)) {
       for (let key in this.allAddRowInfo) {
         removeFieldArrs = removeFieldArrs.concat(this.allAddRowInfo[key]);
