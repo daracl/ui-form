@@ -35,6 +35,9 @@
 
 </html>
 
+<script type="module">
+  import "@daracl/ui-style/theme-vars.css";
+</script>
 <script type="module" src="/src/index.ts"></script>
 <style>
   .form-button {
@@ -47,7 +50,7 @@
   }
 
   body.dark {
-    --bg: #070d19;
+    --bg: #1f2836;
     --bg-color: #ffffff;
   }
 
@@ -76,6 +79,9 @@
     classList.remove("light", "dark");
 
     classList.add(theme);
+
+    // ui-style 테마 전환은 data-daracl-theme 속성으로 한다.
+    document.documentElement.setAttribute("data-daracl-theme", theme);
 
     if (persist) {
       localStorage.setItem(THEME_KEY, theme);

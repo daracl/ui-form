@@ -1,15 +1,16 @@
+@use "@daracl/ui-style/themes" as themes;
 @mixin df-base {
   padding: 0px;
   margin-top: 8px;
-  color: var(--font-color);
+  color: themes.themed(font-color);
 
   *,
   ::after,
   ::before {
     box-sizing: border-box;
-    line-height: var(--line-height);
-    font-size: var(--font-size);
-    color: var(--font-color);
+    line-height: var(--df-line-height);
+    font-size: var(--df-font-size);
+    color: themes.themed(font-color);
   }
 
   .df-txt {
@@ -59,9 +60,9 @@
   select,
   textarea {
     background-color: transparent;
-    color: var(--font-color);
+    color: themes.themed(font-color);
     &[disabled] {
-      background-color: var(--input-disabled-bg);
+      background-color: themes.themed(input-disabled-bg);
       opacity: 0.8;
     }
   }

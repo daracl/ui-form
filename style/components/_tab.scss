@@ -1,3 +1,4 @@
+@use "@daracl/ui-style/themes" as themes;
 @mixin df-tab {
   .df-tab-header {
     list-style: none;
@@ -5,9 +6,9 @@
     padding: 0px;
 
     display: flex;
-    line-height: var(--line-height);
+    line-height: var(--df-line-height);
     width: 100%;
-    border-bottom: 1px solid var(--border-color);
+    border-bottom: 1px solid themes.themed(border-color);
 
     &.df-tab-al {
       &-left {
@@ -32,8 +33,8 @@
 
       &.active {
         a {
-          color: var(--font-hover-color);
-          background-color: var(--tab-bg);
+          color: themes.themed(font-hover-color);
+          background-color: themes.themed(tab-bg);
         }
       }
 
@@ -45,12 +46,12 @@
         float: left;
         padding: 0.5em 1em;
         text-decoration: none;
-        color: var(--font-color);
+        color: themes.themed(font-color);
         height: 30px;
 
         &:hover {
-          background-color: var(--tab-bg-hover);
-          border: 1px solid var(--border-color);
+          background-color: themes.themed(tab-bg-hover);
+          border: 1px solid themes.themed(border-color);
           border-bottom-width: 0;
         }
       }

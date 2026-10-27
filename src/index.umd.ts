@@ -1,5 +1,7 @@
 import { DaraForm } from "./DaraForm";
 
+// CDN / <script> 로 단독 사용하는 경우에도 dark 테마가 동작하도록 테마 변수(--dui-*)를 CSS 에 함께 포함한다.
+import "@daracl/ui-style/theme-vars.css";
 import "../style/daracl.form.scss";
 
 import  "@daracl/datetimepicker/dist/daracl.datetimepicker.min.css";

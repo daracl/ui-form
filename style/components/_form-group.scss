@@ -1,3 +1,4 @@
+@use "@daracl/ui-style/themes" as themes;
 @use "../abstracts" as *;
 
 @mixin df-form-group {
@@ -11,7 +12,7 @@
     flex-direction: row;
     -ms-flex-wrap: wrap;
     flex-wrap: wrap;
-    margin-top: var(--field-margin-top);
+    margin-top: var(--df-field-margin-top);
     margin-bottom: 0px;
     margin-right: 0px !important;
     margin-left: 0px !important;
@@ -48,8 +49,8 @@
 
     &.invalid {
       .df-form-field {
-        border-color: var(--invalid-border-color);
-        outline-color: var(--invalid-border-color);
+        border-color: themes.themed(invalid-border-color);
+        outline-color: themes.themed(invalid-border-color);
       }
 
       > .df-field-container.required > .df-field .df-help-icon {
@@ -60,8 +61,8 @@
       .df-help-message {
         display: block;
         > * {
-          color: var(--invalid-font-color);
-          font-size: var(--font-size-sm);
+          color: themes.themed(invalid-font-color);
+          font-size: var(--df-font-size-sm);
           padding: 3px 0px;
         }
       }
@@ -77,7 +78,7 @@
     }
 
     .df-file-label {
-      border: 1px solid var(--border-color);
+      border: 1px solid themes.themed(input-border-color);
       display: inline;
       width: 100%;
       padding: 3px 15px;
@@ -87,7 +88,7 @@
       transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
 
       &:hover {
-        background-color: var(--button-bg-hover);
+        background-color: themes.themed(button-hover-bg);
       }
     }
   }

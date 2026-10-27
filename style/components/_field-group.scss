@@ -4,7 +4,7 @@
     align-items: center;
 
     .df-field-item {
-      padding-top: var(--field-padding-top);
+      padding-top: var(--df-field-padding-top);
       padding-right: 8px;
       &.df-vertical {
         > * {

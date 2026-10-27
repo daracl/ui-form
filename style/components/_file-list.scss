@@ -1,3 +1,4 @@
+@use "@daracl/ui-style/themes" as themes;
 @mixin df-file-list {
   .df-file-list {
     .df-file-item {
@@ -11,7 +12,7 @@
       cursor: pointer;
 
       &:hover {
-        background-color: var(--button-bg-hover);
+        background-color: themes.themed(button-hover-bg);
       }
 
       // 아이콘 색은 mask 로 잘라내고 --icon-color 테마 변수로 채운다.
@@ -20,7 +21,7 @@
         display: block;
         width: 100%;
         height: 100%;
-        background-color: var(--icon-color);
+        background-color: themes.themed(icon-stroke-color);
         -webkit-mask-repeat: no-repeat;
         mask-repeat: no-repeat;
       }

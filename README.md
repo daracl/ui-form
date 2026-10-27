@@ -142,5 +142,20 @@ type: {
 | identical | field 값이 같은지 비교 | field: field name <br> message: 메시지   |  |
 
 
+# 테마
+
+색상 값은 [`@daracl/ui-style`](https://www.npmjs.com/package/@daracl/ui-style) 의 테마 변수(`--dui-*`)를 사용합니다.
+light 값이 기본값으로 들어 있어 별도 설정 없이도 표시되지만, **dark 테마를 쓰려면 테마 변수 CSS 를 함께 로드**해야 합니다.
+(`daracl.form.umd` 와 함께 쓰는 CSS 에는 이미 포함되어 있습니다.)
+
+```js
+import '@daracl/ui-style/theme-vars.css';
+
+// dark 로 전환
+document.documentElement.setAttribute('data-daracl-theme', 'dark');
+```
+
+> 이전 버전의 `body.dark` / `.daracl-form.dark` 클래스 방식은 지원하지 않습니다. `data-daracl-theme` 속성만 사용합니다.
+
 ## License
 Darainfo is under [MIT License](./LICENSE).

@@ -1,3 +1,4 @@
+@use "@daracl/ui-style/themes" as themes;
 @mixin df-icon {
   .df-icon {
     display: inline-block;
@@ -9,7 +10,7 @@
   // 아이콘 색은 mask 로 잘라내고 --icon-color 테마 변수로 채운다.
   .df-add-icon,
   .df-remove-icon {
-    background-color: var(--icon-color);
+    background-color: themes.themed(icon-stroke-color);
     -webkit-mask-repeat: no-repeat;
     mask-repeat: no-repeat;
   }
