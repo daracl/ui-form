@@ -38,7 +38,7 @@ export default defineConfig(({ mode }) => {
           propertyReadSideEffects: false,
           tryCatchDeoptimization: false,
         },
-        external: ["@daracl/core", "@daracl/toast", "@daracl/datatimepicker"],
+        external: ["@daracl/core", "@daracl/core/utils", "@daracl/toast", "@daracl/datetimepicker"],
         // plugins: isProd ? [terser()] : [],
         output: {
           extend: true,

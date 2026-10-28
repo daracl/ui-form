@@ -1,0 +1,35 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm run build)",
+      "Bash(npm run build:umd)",
+      "Bash(npm run build:escjs)",
+      "Bash(npm run build:tsc)",
+      "Bash(npm run docs:gen)",
+      "Bash(npm run test)",
+      "Bash(npm run pwtest)",
+      "Bash(npm test)",
+      "Bash(node ../ui-common-harness/scripts/*)"
+    ],
+    "deny": [
+      "Edit(dist/**)",
+      "Bash(npm publish*)",
+      "Bash(yarn publish*)",
+      "Bash(pnpm publish*)",
+      "Bash(git push*)"
+    ]
+  },
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Edit|Write|MultiEdit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"$CLAUDE_PROJECT_DIR/.claude/hooks/style-check.mjs\""
+          }
+        ]
+      }
+    ]
+  }
+}

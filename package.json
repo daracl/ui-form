@@ -1,6 +1,6 @@
 {
   "name": "@daracl/form",
-  "version": "0.0.21",
+  "version": "0.0.22",
   "sideEffects": false,
   "description": "Daracl form validation ",
   "author": {
@@ -60,7 +60,7 @@
     "editor.formatOnSave": false
   },
   "peerDependencies": {
-    "@daracl/core": "^0.0.3",
+    "@daracl/core": "^0.0.9",
     "@daracl/toast": "^0.0.10",
     "@daracl/datetimepicker": "^0.0.13"
   },
@@ -74,7 +74,7 @@
     "tslint-config-prettier": "^1.18.0"
   },
   "devDependencies": {
-    "@daracl/core": "^0.0.5",
+    "@daracl/core": "0.0.9",
     "@daracl/toast": "^0.0.10",
     "@daracl/datetimepicker": "^0.0.13",
     "@mxssfd/typedoc-theme": "^1.1.1",
@@ -107,24 +107,35 @@
     "typescript": "^5.1.6",
     "url-loader": "^4.1.1",
     "vite": "^5.4.0",
-    "vite-plugin-banner": "^0.7.1"
+    "vite-plugin-banner": "^0.7.1",
+    "esbuild": "0.21.5"
   },
   "scripts": {
-    "build": "yarn build:escjs && yarn build:umd && yarn mergenclean",
+    "build": "npm run build:escjs && npm run build:umd && npm run mergenclean",
     "build:umd": "vite build --config vite.config.umd.js --mode production && vite build --config vite.config.umd.js --mode development",
     "build:escjs": "vite build --config vite.config.js --mode production && vite build --config vite.config.js --mode development",
-    "mergenclean": "yarn copy-dts && yarn build:tsc && yarn copy-unmin && yarn clean:unmin && yarn copy-html",
+    "mergenclean": "npm run copy-dts && npm run build:tsc && npm run copy-unmin && npm run clean:unmin && npm run copy-html",
     "build:tsc": "tsc --emitDeclarationOnly",
     "dev": "vite",
     "preview": "vite preview",
     "docs:gen": "typedoc --tsconfig tsconfig.doc.json",
     "dts:gen": "npx -p typescript tsc src/index.js --declaration --allowJs --emitDeclarationOnly --outDir dist",
-    "test": "jest",
+    "test": "node --test test/*.test.cjs",
     "pwtest": "playwright test",
     "clean:unmin": "rimraf dist/unmin",
     "copy-html": "cpx \"public/index.html\" dist",
     "copy-unmin": "cpx \"dist/unmin/**.*\" dist",
     "copy-dts": "cpx \"src/**/*.d.ts\" dist",
-    "prepublishOnly": "npm run build"
+    "prepublishOnly": "npm run build",
+    "start": "npm run dev",
+    "typecheck": "tsc --noEmit",
+    "verify": "npm run typecheck && npm test && npm run build"
+  },
+  "engines": {
+    "node": ">=22.12.0",
+    "npm": ">=10"
+  },
+  "overrides": {
+    "@daracl/core": "$@daracl/core"
   }
 }

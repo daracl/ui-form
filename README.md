@@ -20,21 +20,29 @@ Latest ✔ | Latest ✔ | Latest ✔ | Latest ✔ | Latest ✔ |
 </p>
 
 
-1. Install
+## Development
+
+Install Node.js 24 LTS and npm. With nvm, run `nvm use` first.
 
 ```sh
-yarn install
-# OR
-npm install
+git clone https://github.com/daracl/ui-form.git
+cd ui-form
+npm ci
+npm run dev
 ```
 
-2. Run
+Open the address printed by Vite at `/uitest/index.html`. `npm start` starts the same server.
 
-```sh
-npm start
-```
+- `npm run typecheck`: TypeScript checks
+- `npm test`: shared utility regression tests
+- `npm run build`: ES/CJS, UMD, CSS and declarations
+- `npm run verify`: all checks, tests and builds
 
-3. Open `http://localhost:8889` in your browser
+Shared utilities use the public npm package `@daracl/core@0.0.9`. No sibling corejs checkout, absolute path, npm link or private server is required. Commit package.json and package-lock.json together; teammates install with `npm ci`. Publish corejs changes before updating this dependency. Utilities import the public `@daracl/core/utils` entry point, which avoids loading the core root module and its styles.
+
+The npm override unifies core at 0.0.9 because the current toast and datetimepicker packages declare older core peer ranges. Recheck their compatibility when upgrading. Overrides apply to this repository; consumers of the published form package may need the same override until those peer ranges are updated upstream.
+
+Type checks, blank checks, own-property checks, deep merges, HTML escaping, template-to-element conversion and CSS class whitespace normalization delegate to core. `replaceXss` and `unReplace` alias core's `xss` and `unXss`; form-specific field-name transformations stay here. `isEmpty` still means null/undefined only; numeric checks preserve existing coercion. Merge returns a new object and follows core array merging rules while excluding prototype pollution keys.
 
 
 # 사용방법

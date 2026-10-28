@@ -1,7 +1,8 @@
+import { FIELD_POSITION_STYLE } from "@/constants";
 import { FieldStyle, FormField } from "@t/FormField";
-import * as utils from "./utils";
-import { FIELD_POSITION_STYLE, ALIGN } from "@/constants";
 import { FormOptions } from "@t/FormOptions";
+import { isNumber } from "./utils";
+import { resolveClassName } from "@daracl/core/utils";
 
 /**
  * field style 처리
@@ -34,10 +35,10 @@ export function resolveFieldStyle(formOptions: FormOptions, field: FormField, be
 
   fieldStyle.fieldClass = `${positionArr[0] ? "df-" + positionArr[0] : ""} ${field.style?.customClass || ""}`;
   if (width) {
-    if (utils.isNumber(width)) {
-      fieldStyle.fieldClass += utils.isNumber(width) ? ` df-col-xs-${width}` : "";
+    if (isNumber(width)) {
+      fieldStyle.fieldClass += isNumber(width) ? ` df-col-xs-${width}` : "";
     } else {
-      fieldStyle.fieldStyle = utils.isNumber(width) ? "" : `width:${width};`;
+      fieldStyle.fieldStyle = isNumber(width) ? "" : `width:${width};`;
     }
   }
 
@@ -47,7 +48,7 @@ export function resolveFieldStyle(formOptions: FormOptions, field: FormField, be
   fieldStyle.labelAlignClass = positionArr[1];
 
   if (!isLabelHide && labelWidth && !["top", "bottom"].includes(positionArr[0])) {
-    if (utils.isNumber(labelWidth)) {
+    if (isNumber(labelWidth)) {
       const labelWidthValue = +labelWidth;
       defaultValueWidth = 12 - labelWidthValue;
       fieldStyle.labelClass = `df-col-xs-${labelWidthValue}`;
@@ -62,7 +63,7 @@ export function resolveFieldStyle(formOptions: FormOptions, field: FormField, be
     fieldStyle.valueClass = "df-col-full";
   } else {
     if (valueWidth && !["top", "bottom"].includes(positionArr[0])) {
-      if (utils.isNumber(valueWidth)) {
+      if (isNumber(valueWidth)) {
         fieldStyle.valueClass = fieldStyle.labelStyle ? "df-col-full" : `df-col-xs-${valueWidth}`;
       } else {
         fieldStyle.valueStyle = `width:${valueWidth};`;
@@ -72,17 +73,13 @@ export function resolveFieldStyle(formOptions: FormOptions, field: FormField, be
     }
   }
 
-  fieldStyle.fieldClass = spaceReplace(fieldStyle.fieldClass);
-  fieldStyle.labelClass = spaceReplace(fieldStyle.labelClass);
-  fieldStyle.valueClass = spaceReplace(fieldStyle.valueClass);
+  fieldStyle.fieldClass = resolveClassName(fieldStyle.fieldClass).join(" ");
+  fieldStyle.labelClass = resolveClassName(fieldStyle.labelClass).join(" ");
+  fieldStyle.valueClass = resolveClassName(fieldStyle.valueClass).join(" ");
 
   return fieldStyle;
 }
 
 export function orientationClassName(orientation: string): string {
   return orientation === "horizontal" ? "df-horizontal" : "df-vertical";
-}
-
-function spaceReplace(str: string): string {
-  return str.replace(/\s+/g, " ").trim();
 }

@@ -5,7 +5,7 @@ import { fileValidator } from "@/rule/fileValidator";
 import Language from "@/util/Language";
 import { customChangeEventCall } from "@/event/renderEvents";
 import { DaraForm } from "@/DaraForm";
-import { isArray } from "@daracl/core";
+import { isArray } from "@daracl/core/utils";
 
 export default class FileRender extends Render {
   private element: HTMLInputElement;
