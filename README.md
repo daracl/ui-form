@@ -48,9 +48,9 @@ The dev/preview server binds to the local machine by default and restricts file 
 
 See [build verification results](BUILD.md) for timing, security checks and compatibility limits.
 
-Shared utilities use the public npm package `@daracl/core@0.0.10`. No sibling corejs checkout, absolute path, npm link or private server is required. Commit package.json and package-lock.json together; teammates install with `npm ci`. Publish corejs changes before updating this dependency. Utilities import the public `@daracl/core/utils` entry point, which avoids loading the core root module and its styles.
+Shared utilities use the public npm package `@daracl/core@0.0.12`. No sibling corejs checkout, absolute path, npm link or private server is required. Commit package.json and package-lock.json together; teammates install with `npm ci`. Publish corejs changes before updating this dependency. Utilities import the public `@daracl/core/utils` entry point, which avoids loading the core root module and its styles.
 
-The npm override unifies core at 0.0.10 because the current toast and datetimepicker packages declare older core peer ranges. Recheck their compatibility when upgrading. Overrides apply to this repository; consumers of the published form package may need the same override until those peer ranges are updated upstream.
+The npm override unifies core at 0.0.12 because the current toast and datetimepicker packages declare older core peer ranges. Recheck their compatibility when upgrading. Overrides apply to this repository; consumers of the published form package may need the same override until those peer ranges are updated upstream.
 
 Type checks, blank checks, own-property checks, deep merges, HTML escaping, template-to-element conversion and CSS class whitespace normalization delegate to core. `replaceXss` and `unReplace` alias core's `xss` and `unXss`; form-specific field-name transformations stay here. `isEmpty` still means null/undefined only; numeric checks preserve existing coercion. Merge returns a new object and follows core array merging rules while excluding prototype pollution keys.
 
