@@ -24,7 +24,7 @@ export default class DateRender extends Render {
     let dateOnSelectEvent: any;
     this.field.rendererOptions = Object.assign({}, this.field.rendererOptions);
     if (typeof this.field.rendererOptions.onSelect !== "undefined") {
-      dateOnSelectEvent = typeof this.field.rendererOptions.onSelect;
+      dateOnSelectEvent = this.field.rendererOptions.onSelect;
     }
 
     if (utils.isUndefined(this.field.rendererOptions.mode)) {
@@ -36,7 +36,7 @@ export default class DateRender extends Render {
     }
 
     this.field.rendererOptions.onSelect = (dt: any, e: Event) => {
-      if (dateOnSelectEvent) {
+      if (utils.isFunction(dateOnSelectEvent)) {
         dateOnSelectEvent(dt, e);
       }
 

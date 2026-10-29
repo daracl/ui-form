@@ -156,7 +156,7 @@ export default class GridRender extends Render {
     for (let columnField of addColumns) {
       columnField.$instance = new (columnField.$renderType as any)(columnField, addRowElement?.querySelector(`#${columnField.$xssName}`), this.gridForm);
 
-      if (valueItem[columnField.$orgin.name]) {
+      if (utils.hasOwnProp(valueItem, columnField.$orgin.name)) {
         columnField.$instance.setValue(valueItem[columnField.$orgin.name]);
       }
     }

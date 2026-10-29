@@ -80,7 +80,7 @@ export default class CheckboxRender extends Render {
 
     templates.push(` <div class="df-field"><div class="df-field-group">`);
     field.listItem?.list?.forEach((val) => {
-      const checkVal = val[valueKey];
+      const checkVal = String(val[valueKey] ?? "");
       templates.push(`
           <span class="df-field-item ${orientationClassName(field.listItem.orientation ?? OrientationMap.horizontal)}">
               <label>

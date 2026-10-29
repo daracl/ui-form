@@ -191,7 +191,11 @@ export default class TabRender extends Render {
     }
   }
 
-  reset() {}
+  reset() {
+    for (const childField of this.field.children ?? []) {
+      childField.$tabForm?.resetForm();
+    }
+  }
 
   getElement(): Element {
     return this.rowElement;

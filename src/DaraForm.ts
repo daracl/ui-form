@@ -10,7 +10,7 @@ import { regexpValidator } from "./rule/regexpValidator";
 import FieldInfoMap from "@/FieldInfoMap";
 import FormTemplate from "./FormTemplate";
 import { FORM_MODE } from "./constants";
-import { initFormOptions, setDefaultOptions } from "./defaultOption";
+import { initFormOptions, normalizeFields, setDefaultOptions } from "./defaultOption";
 
 declare const APP_VERSION: string;
 
@@ -280,6 +280,7 @@ export class DaraForm {
    * @param {FormField} field
    */
   public addField = (field: FormField) => {
+    if (!normalizeFields([field]).length) return;
     this.options.fields.push(field);
     this.formTemplate.addRow(field);
     this.conditionCheck();
@@ -538,11 +539,11 @@ export class DaraForm {
   public destroy = () => {
     this.formElement.className = this.orginFormStyleClass;
     this.formElement.replaceChildren();
+    delete allInstance[this.selector];
 
     for (const key in this) {
       if (utils.hasOwnProp(this, key)) {
         delete this[key];
-        delete allInstance[this.selector];
       }
     }
   };
@@ -561,24 +562,15 @@ export class DaraForm {
   };
 
   public static instance(ele: Element | String) {
-    let element;
-    if (utils.isString(ele)) {
-      element = document.querySelector(ele);
-    } else {
-      element = ele;
-    }
-    element = element as Element;
+    const element = utils.isString(ele) ? document.querySelector(ele) : ele as Element;
+    if (!element) return undefined;
     let selector = element.getAttribute(SEQ_ATTR_KEY);
-
-    if (utils.isUndefined(selector) || utils.isBlank(selector)) {
+    if (utils.isBlank(selector)) {
       const keys = Object.keys(allInstance);
-      if (keys.length > 1) {
-        throw new Error(`selector empty : [${selector}]`);
-      }
+      if (keys.length > 1) throw new Error(`selector empty : [${selector}]`);
       selector = keys[0];
-
-      return allInstance[selector];
     }
+    return selector ? allInstance[selector] : undefined;
   }
   /**
    * 모든 field 얻기
@@ -592,8 +584,10 @@ export class DaraForm {
    * @param fields
    */
   public setFields = (fields: any[]) => {
-    this.options.fields = fields;
-    this.createForm(fields);
+    this.options.fields = normalizeFields(fields);
+    this.formElement.replaceChildren();
+    this.formValue = {};
+    this.createForm(this.options.fields);
   };
 
   public getFieldInfoMap() {

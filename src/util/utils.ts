@@ -68,12 +68,7 @@ export const getXssFieldName = (field: FormField): string => {
   return field.$xssName;
 };
 
-export const isHiddenField = (field: FormField): boolean => {
-  if (field.renderType === "hidden") {
-    return true;
-  }
-  return false;
-};
+export const isHiddenField = (field: FormField | null | undefined): boolean => field?.renderType === "hidden";
 
 /** Merge form options using the shared core implementation.
  * Keep the legacy non-object first argument behavior.

@@ -72,3 +72,10 @@ test('form escaping remains available', () => {
   assert.equal(utils.getXssFieldName({ name: 'a&b' }), 'df_a_b');
   assert.equal(utils.getXssFieldName({ name: '&<>"\'' }), 'df______');
 });
+
+test('hidden field checks tolerate missing entries', () => {
+  assert.equal(utils.isHiddenField(undefined), false);
+  assert.equal(utils.isHiddenField(null), false);
+  assert.equal(utils.isHiddenField({ renderType: 'hidden' }), true);
+  assert.equal(utils.isHiddenField({ renderType: 'text' }), false);
+});

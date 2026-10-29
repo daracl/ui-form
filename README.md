@@ -36,11 +36,21 @@ Open the address printed by Vite at `/uitest/index.html`. `npm start` starts the
 - `npm run typecheck`: TypeScript checks
 - `npm test`: shared utility regression tests
 - `npm run build`: ES/CJS, UMD, CSS and declarations
-- `npm run verify`: all checks, tests and builds
+- `npm run verify`: type checks, Node tests, builds and package smoke tests
 
-Shared utilities use the public npm package `@daracl/core@0.0.9`. No sibling corejs checkout, absolute path, npm link or private server is required. Commit package.json and package-lock.json together; teammates install with `npm ci`. Publish corejs changes before updating this dependency. Utilities import the public `@daracl/core/utils` entry point, which avoids loading the core root module and its styles.
+Browser regression tests cover the six examples and form interactions. Run `npx playwright install chromium` once, then `npm run verify` followed by `npm run pwtest` (the browser suite also checks the generated dist bundles). To use an already installed Edge instead, set `PLAYWRIGHT_CHANNEL=msedge` in your shell. CI runs both `verify` and browser tests. Browser tests start and stop their own server; no manually running dev server is needed.
 
-The npm override unifies core at 0.0.9 because the current toast and datetimepicker packages declare older core peer ranges. Recheck their compatibility when upgrading. Overrides apply to this repository; consumers of the published form package may need the same override until those peer ranges are updated upstream.
+Build configuration is ESM (`vite.config.mjs`). `npm run build` uses one Node process for Vite, generates declarations in parallel, cleans `dist` once and copies public assets once. ES/CJS, UMD, CSS and sourcemap filenames stay unchanged. `npm run build:escjs` and `npm run build:umd` only refresh their own bundles; use the full build for packaging.
+
+The dev/preview server binds to the local machine by default and restricts file access to this checkout. Use `npm run dev -- --host` only when LAN access is intentional. Host validation and Vite's default CORS restrictions remain enabled.
+
+`npm run audit:security` checks production dependencies; `npm run audit:security:all` includes development tools. esbuild is overridden to the patched version for toast's unused build-tool dependency too. Removed unused Webpack loaders, cpx, TSLint, Jest and legacy documentation dependencies. Tests use Node's built-in test runner; file operations use Node's filesystem APIs.
+
+See [build verification results](BUILD.md) for timing, security checks and compatibility limits.
+
+Shared utilities use the public npm package `@daracl/core@0.0.10`. No sibling corejs checkout, absolute path, npm link or private server is required. Commit package.json and package-lock.json together; teammates install with `npm ci`. Publish corejs changes before updating this dependency. Utilities import the public `@daracl/core/utils` entry point, which avoids loading the core root module and its styles.
+
+The npm override unifies core at 0.0.10 because the current toast and datetimepicker packages declare older core peer ranges. Recheck their compatibility when upgrading. Overrides apply to this repository; consumers of the published form package may need the same override until those peer ranges are updated upstream.
 
 Type checks, blank checks, own-property checks, deep merges, HTML escaping, template-to-element conversion and CSS class whitespace normalization delegate to core. `replaceXss` and `unReplace` alias core's `xss` and `unXss`; form-specific field-name transformations stay here. `isEmpty` still means null/undefined only; numeric checks preserve existing coercion. Merge returns a new object and follows core array merging rules while excluding prototype pollution keys.
 
