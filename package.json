@@ -65,7 +65,7 @@
     "@daracl/datetimepicker": "^0.0.13"
   },
   "dependencies": {
-    "@daracl/ui-style": "^0.0.1",
+    "@daracl/ui-style": "^0.0.6",
     "tslib": "^2.8.1"
   },
   "devDependencies": {
