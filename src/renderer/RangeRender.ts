@@ -21,7 +21,7 @@ export default class RangeRender extends Render {
 
   mounted() {
     this.element.addEventListener("input", (e: any) => {
-      this.rangeNumElement.innerHTML = e.target.value;
+      this.rangeNumElement.textContent = e.target.value;
 
       this.element.setAttribute("title", e.target.value);
       customChangeEventCall(this.field, e, this, this.getValue());
@@ -36,14 +36,18 @@ export default class RangeRender extends Render {
 
     fieldContainerElement.innerHTML = `
         <div class="df-field">
-            <span class="df-range-num">${field.defaultValue ? field.defaultValue : 0}</span>
-            <input type="range" name="${field.$xssName}" class="df-form-field df-range df-help-icon" min="${field.rule?.minimum ?? 0}" max="${field.rule?.maximum ?? 100}"/>
+            <span class="df-range-num"></span>
+            <input type="range" name="${field.$xssName}" class="df-form-field df-range df-help-icon"/>
         </div> 
         ${Render.getDescriptionTemplate(field)}
         <div class="df-help-message"></div>
        `;
 
     this.element = fieldContainerElement.querySelector(`[name="${field.$xssName}"]`) as HTMLInputElement;
+    this.element.min = String(field.rule?.minimum ?? 0);
+    this.element.max = String(field.rule?.maximum ?? 100);
+    const rangeNumber = fieldContainerElement.querySelector(".df-range-num");
+    if (rangeNumber) rangeNumber.textContent = String(field.defaultValue || 0);
   }
 
   getValue() {

@@ -12,7 +12,7 @@ export const invalidMessage = (field: FormField, rowElement: Element, validResul
 
     const helpMessageElement = rowElement.querySelector(".df-help-message");
     if (helpMessageElement) {
-      helpMessageElement.innerHTML = "";
+      helpMessageElement.replaceChildren();
     }
 
     return;
@@ -33,11 +33,11 @@ export const invalidMessage = (field: FormField, rowElement: Element, validResul
 
     const helpMessageElement = rowElement.querySelector(".df-help-message");
     if (helpMessageElement && message.length > 0) {
-      const msgHtml: string[] = [];
-      message.forEach((item) => {
-        msgHtml.push(`<div>${item}</div>`);
-      });
-      helpMessageElement.innerHTML = msgHtml.join("");
+      helpMessageElement.replaceChildren(...message.map((item) => {
+        const element = document.createElement("div");
+        element.textContent = item;
+        return element;
+      }));
     }
   }
 };

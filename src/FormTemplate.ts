@@ -61,10 +61,10 @@ export default class FormTemplate {
     this.addRowFieldInfo(field);
 
     const rowElement = utils.templateToElement(`
-        <div class="df-row df-form-group ${fieldStyle.fieldClass}" id="${field.$key}">
-          ${labelHideFlag ? "" : `<div class="df-label ${fieldStyle.labelClass} ${fieldStyle.labelAlignClass}" title="${field.label ?? ""}" style="${fieldStyle.labelStyle}">${this.getLabelTemplate(field)}</div>`}
+        <div class="df-row df-form-group ${utils.escapeHtml(fieldStyle.fieldClass)}" id="${field.$key}">
+          ${labelHideFlag ? "" : `<div class="df-label ${utils.escapeHtml(fieldStyle.labelClass)} ${utils.escapeHtml(fieldStyle.labelAlignClass)}" title="${field.label ?? ""}" style="${utils.escapeHtml(fieldStyle.labelStyle)}">${this.getLabelTemplate(field)}</div>`}
 
-          <div class="df-field-container ${fieldStyle.valueClass} ${field.required ? "required" : ""}" style="${fieldStyle.valueStyle}"></div>
+          <div class="df-field-container ${utils.escapeHtml(fieldStyle.valueClass)} ${field.required ? "required" : ""}" style="${utils.escapeHtml(fieldStyle.valueStyle)}"></div>
         </div>
     `);
 
@@ -128,15 +128,15 @@ export default class FormTemplate {
       let labelTemplate = "";
       if (labelHideFlag) {
         childFieldStyle = resolveFieldStyle(this.options, childField, beforeField, !isEmptyLabel);
-        labelTemplate = isEmptyLabel ? `<span class="df-label df-empty ${childFieldStyle.labelClass}" style="${childFieldStyle.labelStyle}"></span>` : "";
+        labelTemplate = isEmptyLabel ? `<span class="df-label df-empty ${utils.escapeHtml(childFieldStyle.labelClass)}" style="${utils.escapeHtml(childFieldStyle.labelStyle)}"></span>` : "";
       } else {
         childFieldStyle = resolveFieldStyle(this.options, childField, beforeField, false);
-        labelTemplate = `<span class="df-label ${childFieldStyle.labelClass} ${childFieldStyle.labelAlignClass}" title="${childField.label ?? ""}" style="${childFieldStyle.labelStyle}">${this.getLabelTemplate(childField)}</span>`;
+        labelTemplate = `<span class="df-label ${utils.escapeHtml(childFieldStyle.labelClass)} ${utils.escapeHtml(childFieldStyle.labelAlignClass)}" title="${childField.label ?? ""}" style="${utils.escapeHtml(childFieldStyle.labelStyle)}">${this.getLabelTemplate(childField)}</span>`;
       }
 
-      const groupElement = utils.templateToElement(`<div class="df-form-group ${childFieldStyle.fieldClass}" style="${childFieldStyle.fieldStyle}" id="${childField.$key}">
+      const groupElement = utils.templateToElement(`<div class="df-form-group ${utils.escapeHtml(childFieldStyle.fieldClass)}" style="${utils.escapeHtml(childFieldStyle.fieldStyle)}" id="${childField.$key}">
         ${labelTemplate}
-        <span class="df-field-container ${childFieldStyle.valueClass} ${childField.required ? "required" : ""}" style="${childFieldStyle.valueStyle}"></span>
+        <span class="df-field-container ${utils.escapeHtml(childFieldStyle.valueClass)} ${childField.required ? "required" : ""}" style="${utils.escapeHtml(childFieldStyle.valueStyle)}"></span>
       </div>`);
 
       if (groupElement) {
@@ -165,7 +165,7 @@ export default class FormTemplate {
    */
   public getLabelTemplate(field: FormField) {
     const requiredTemplate = field.required ? `<span class="required"></span>` : "";
-    const tooltipTemplate = utils.isBlank(field.tooltip) ? "" : `<span class="df-tooltip">?<span class="df-tooltip-text">${field.tooltip}</span></span>`;
+    const tooltipTemplate = utils.isBlank(field.tooltip) ? "" : `<span class="df-tooltip">?<span class="df-tooltip-text">${utils.escapeHtml(field.tooltip)}</span></span>`;
 
     return `<span class="df-label-text">${field.label ?? ""}</span> ${tooltipTemplate} ${requiredTemplate}`;
   }

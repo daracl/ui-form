@@ -2,6 +2,7 @@ import type { FormField } from "@t/FormField";
 import { isBlank, isNumeric, isPlainObject, isUndefined, objectDeepMerge, xss as replaceXss, unXss as unReplace } from "@daracl/core/utils";
 export { isArray, isBlank, isFunction, isString, isUndefined, isPlainObject, isNil as isEmpty, hasProperty as hasOwnProp, getHashCode, templateToElement } from "@daracl/core/utils";
 export { replaceXss, unReplace };
+export const escapeHtml = (value: unknown): string => replaceXss(String(value ?? ""));
 
 export const unFieldName = (fieldName: string): string => {
   if (fieldName) {

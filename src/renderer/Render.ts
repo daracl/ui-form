@@ -68,7 +68,7 @@ export abstract class Render {
     const classNames = field.descriptionClass ? utils.replaceXss(field.descriptionClass) : "";
     const style = field.descriptionStyle ? 'style="' + utils.replaceXss(field.descriptionStyle) + '"' : "";
 
-    return field.description ? `<div class="df-description ${classNames}" ${style}>${field.description}</div>` : "";
+    return field.description ? `<div class="df-description ${classNames}" ${style}>${utils.escapeHtml(field.description)}</div>` : "";
   }
 
   public changeEventCall(field: FormField, e: Event | null, rederInfo: Render, fieldValue: any): boolean | undefined {

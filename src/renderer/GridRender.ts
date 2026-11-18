@@ -87,8 +87,8 @@ export default class GridRender extends Render {
       theadTemplate.push("</th>");
 
       for (const childField of field.children) {
-        colgroupTemplate.push(`<col style="width:${childField.style?.width ?? "*"}">`);
-        theadTemplate.push(`<th class="df-grid-header">${childField.label}</th>`);
+        colgroupTemplate.push(`<col style="width:${utils.escapeHtml(childField.style?.width ?? "*")}">`);
+        theadTemplate.push(`<th class="df-grid-header">${utils.escapeHtml(childField.label)}</th>`);
       }
       colgroupTemplate.push("</colgroup>");
       theadTemplate.push("</tr>");
@@ -97,7 +97,7 @@ export default class GridRender extends Render {
     fieldContainerElement.innerHTML = `
     <div class="df-grid-field">
       ${addBtnTemplate.join("")}
-     <div class="df-grid-container ${field.style?.position ?? ""}" style="height:${field.rendererOptions?.height ?? "auto"};">
+     <div class="df-grid-container ${utils.escapeHtml(field.style?.position)}" style="height:${utils.escapeHtml(field.rendererOptions?.height ?? "auto")};">
         <table class="df-grid">${colgroupTemplate.join("")}<thead>${theadTemplate.join("")}</thead><tbody></tbody></table>
      </div>
      </div>
@@ -136,7 +136,7 @@ export default class GridRender extends Render {
 
       formTemplate.addRowFieldInfo(columnField);
 
-      rowTemplate.push(`<td id="${columnField.$xssName}"><div class="df-field-container ${columnField.required ? "required" : ""} " style="${fieldStyle.valueStyle}"></div></td>`);
+      rowTemplate.push(`<td id="${columnField.$xssName}"><div class="df-field-container ${columnField.required ? "required" : ""} " style="${utils.escapeHtml(fieldStyle.valueStyle)}"></div></td>`);
     }
     rowTemplate.push("</tr>");
 

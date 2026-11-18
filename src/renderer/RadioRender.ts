@@ -85,8 +85,8 @@ export default class RadioRender extends Render {
       templates.push(
         `<span class="df-field-item ${orientationClassName(field.orientation ?? OrientationMap.horizontal)}">
         <label>
-            <input type="radio" name="${fieldName}" value="${radioVal}" class="df-form-field df-radio" ${val.selected ? "checked" : ""} ${val.disabled ? "disabled" : ""}/>
-            ${Render.valuesLabelValue(labelKey, val)}
+            <input type="radio" name="${fieldName}" value="${utils.escapeHtml(radioVal)}" class="df-form-field df-radio" ${val.selected ? "checked" : ""} ${val.disabled ? "disabled" : ""}/>
+            ${utils.escapeHtml(Render.valuesLabelValue(labelKey, val))}
         </label>
         </span>
                 `

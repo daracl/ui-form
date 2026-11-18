@@ -133,14 +133,14 @@ export default class DropdownRender extends Render {
     let template = "";
 
     if (field.rendererOptions?.disableDefaultOption !== true) {
-      template += `<option value="">${Language.getMessage("selection")}</option>`;
+      template += `<option value="">${utils.escapeHtml(Language.getMessage("selection"))}</option>`;
     }
     field.listItem?.list?.forEach((val) => {
       const attr = `${val.selected ? "selected" : ""} ${val.disabled ? "disabled" : ""}`;
       if (utils.isUndefined(val[valueKey]) && val.label) {
-        template += `<option value="${val.value || ""}" ${attr}>${val.label}</option>`;
+        template += `<option value="${utils.escapeHtml(val.value || "")}" ${attr}>${utils.escapeHtml(val.label)}</option>`;
       } else {
-        template += `<option value="${val[valueKey]}" ${attr}>${Render.valuesLabelValue(labelKey, val)}</option>`;
+        template += `<option value="${utils.escapeHtml(val[valueKey])}" ${attr}>${utils.escapeHtml(Render.valuesLabelValue(labelKey, val))}</option>`;
       }
     });
 

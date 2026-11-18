@@ -2,6 +2,7 @@ import { Message } from "@t/Message";
 import { FormField } from "../types/FormField";
 import { ValidResult } from "@t/ValidResult";
 import { RULES } from "@/constants";
+import { unReplace } from "./utils";
 
 let localeMessage: Message = {
   file: {
@@ -93,7 +94,7 @@ class Language {
 
     (validResult.constraint ?? []).forEach((constraint) => {
       if (constraint === RULES.REQUIRED) {
-        messageFormat = message(this.lang.required, field);
+        messageFormat = this.lang.required;
         messageFormats.push(messageFormat);
       }
 
@@ -111,7 +112,7 @@ class Language {
 
     const reMessage: string[] = [];
 
-    const msgParam = Object.assign({}, { name: field.name, label: field.label }, field.rule);
+    const msgParam = Object.assign({}, { name: field.name, label: unReplace(field.label) }, field.rule);
     messageFormats.forEach((msgFormat) => {
       if (msgFormat) {
         reMessage.push(message(msgFormat, msgParam));

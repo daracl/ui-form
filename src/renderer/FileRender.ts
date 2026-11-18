@@ -35,6 +35,16 @@ export default class FileRender extends Render {
     return this.field.listItem?.labelField ?? "fileName";
   }
 
+  private getDownloadUrl(value: unknown): string | null {
+    if (typeof value !== "string" || !value.trim()) return null;
+    try {
+      const url = new URL(value, location.href);
+      return (url.protocol === "http:" || url.protocol === "https:") && url.origin === location.origin ? url.href : null;
+    } catch {
+      return null;
+    }
+  }
+
   constructor(field: FormField, rowElement: HTMLElement, daraForm: DaraForm) {
     super(daraForm, field, rowElement);
 
@@ -138,7 +148,7 @@ export default class FileRender extends Render {
         row.className = "df-file-item";
         row.dataset.seq = String(file.$seq);
         const download = document.createElement("span");
-        const canDownload = this.fileOptions.downloadable !== false && (file[this.fileIdKey] !== undefined && file[this.fileIdKey] !== null || Boolean(file.url));
+        const canDownload = this.fileOptions.downloadable !== false && (file[this.fileIdKey] !== undefined && file[this.fileIdKey] !== null || this.getDownloadUrl(file.url) !== null || Boolean(this.field.fileDownload));
         download.className = `df-file-icon ${canDownload ? "df-file-download" : "df-empty-icon"}`;
         const remove = document.createElement("span");
         remove.className = "df-file-icon df-file-remove";
@@ -177,8 +187,9 @@ export default class FileRender extends Render {
 
             const item = this.fileList[idx];
 
-            if (item.url) {
-              location.href = item.url;
+            const downloadUrl = this.getDownloadUrl(item.url);
+            if (downloadUrl) {
+              location.href = downloadUrl;
               return;
             }
 

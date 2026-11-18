@@ -84,8 +84,8 @@ export default class CheckboxRender extends Render {
       templates.push(`
           <span class="df-field-item ${orientationClassName(field.listItem?.orientation ?? OrientationMap.horizontal)}">
               <label>
-                  <input type="checkbox" name="${fieldName}" value="${checkVal ? utils.replaceXss(checkVal) : ""}" class="df-form-field df-checkbox" ${val.selected ? "checked" : ""} ${val.disabled ? "disabled" : ""}  />
-                  ${Render.valuesLabelValue(labelKey, val)}
+                  <input type="checkbox" name="${fieldName}" value="${utils.escapeHtml(checkVal)}" class="df-form-field df-checkbox" ${val.selected ? "checked" : ""} ${val.disabled ? "disabled" : ""}  />
+                  ${utils.escapeHtml(Render.valuesLabelValue(labelKey, val))}
               </label>
           </span>
       `);
