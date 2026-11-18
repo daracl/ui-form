@@ -124,7 +124,7 @@ export default class GridRender extends Render {
     }
     rowTemplate.push("</td>");
 
-    for (const childField of this.field.children) {
+    for (const childField of this.field.children ?? []) {
       let fieldStyle: FieldStyle = resolveFieldStyle(options, childField, null, true);
 
       let columnField = utils.merge({}, childField) as FormField;
@@ -215,7 +215,7 @@ export default class GridRender extends Render {
       return (this.customFunction.getValue as any).call(this, this.field, this.rowElement);
     }
     let result = [];
-    const children = this.field.children;
+    const children = this.field.children ?? [];
     const childrenLength = children.length;
     for (let idx in this.allAddRowInfo) {
       const rowColumns = this.allAddRowInfo[idx];

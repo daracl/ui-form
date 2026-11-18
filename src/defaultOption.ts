@@ -1,8 +1,8 @@
-import { FormOptions } from "./types/FormOptions";
+import { FormOptions, FormOptionsInput } from "./types/FormOptions";
 import type { FormField } from "./types/FormField";
 import { merge } from "./util/utils";
 
-export function initFormOptions(options: FormOptions): FormOptions {
+export function initFormOptions(options: FormOptionsInput): FormOptions {
   const opts = merge({}, DEFAULT_OPTIONS, options) as FormOptions;
   opts.fields = normalizeFields(opts.fields);
 
@@ -14,7 +14,7 @@ export function initFormOptions(options: FormOptions): FormOptions {
  *
  * @param options 옵션
  */
-export function setDefaultOptions(options: Partial<FormOptions>): void {
+export function setDefaultOptions(options: Partial<FormOptionsInput>): void {
   DEFAULT_OPTIONS = merge({}, DEFAULT_OPTIONS, options);
   DEFAULT_OPTIONS.fields = normalizeFields(DEFAULT_OPTIONS.fields);
 }

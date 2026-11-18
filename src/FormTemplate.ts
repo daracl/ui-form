@@ -103,7 +103,7 @@ export default class FormTemplate {
 
     let idx = 0;
 
-    for (const childField of field.children) {
+    for (const childField of field.children ?? []) {
       if (utils.isEmpty(childField)) {
         throw new Error(`parent field :[${field.$validName}], children index ${idx},  empty [${childField}]`);
       }

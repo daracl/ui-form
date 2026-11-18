@@ -5,7 +5,7 @@ import { DaraForm } from "@/DaraForm";
 export default class HiddenRender extends Render {
   constructor(field: FormField, rowElement: HTMLElement, daraForm: DaraForm) {
     super(daraForm, field, rowElement);
-    this.field.$value = field.defaultValue;
+    this.field.$value = field.defaultValue ?? "";
   }
 
   mounted() {}

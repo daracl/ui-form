@@ -37,7 +37,7 @@ export default class DropdownRender extends Render {
       this.defaultSelected = initDefaultValue;
     } else if (!this.defaultSelected) {
       if (field.rendererOptions?.disableDefaultOption === true) {
-        this.defaultSelected = this.field.listItem?.list?.length > 0 ? this.field.listItem.list[0][valueKey] || "" : "";
+        this.defaultSelected = (this.field.listItem?.list?.length ?? 0) > 0 ? this.field.listItem!.list[0][valueKey] || "" : "";
       }
     }
 

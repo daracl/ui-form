@@ -44,17 +44,17 @@ export const numberValidator = (value: string, field: FormField): ValidResult | 
       maxExclusive = false;
 
     if (isMinimum) {
-      if (rule.exclusiveMinimum && numValue <= rule.minimum) {
+      if (rule.exclusiveMinimum && numValue <= rule.minimum!) {
         minExclusive = true;
-      } else if (numValue < rule.minimum) {
+      } else if (numValue < rule.minimum!) {
         minRule = true;
       }
     }
 
     if (isMaximum) {
-      if (rule.exclusiveMaximum && numValue >= rule.maximum) {
+      if (rule.exclusiveMaximum && numValue >= rule.maximum!) {
         maxExclusive = true;
-      } else if (numValue > rule.maximum) {
+      } else if (numValue > rule.maximum!) {
         maxRule = true;
       }
     }

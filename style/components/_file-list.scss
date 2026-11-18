@@ -11,6 +11,10 @@
       vertical-align: middle;
       cursor: pointer;
 
+      &[hidden] {
+        display: none;
+      }
+
       &:hover {
         background-color: themes.themed(button-hover-bg);
       }

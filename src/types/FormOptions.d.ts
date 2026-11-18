@@ -1,5 +1,5 @@
 import { FORM_MODE, TEXT_ALIGN_TYPE } from "@/constants";
-import { OptionCallback } from "./FormField";
+import { FormField, FormFieldInput, OptionCallback } from "./FormField";
 
 /**
  * form options
@@ -20,31 +20,31 @@ export interface FormOptions {
       valueWidth: '9'
    * ```
    */
-  style: {
+  style?: {
     /**
      * form width
      * @example
      * 600px, 100em
      */
-    width: string;
+    width?: string;
     /**
      * field label width
      * @example
      * bootstrap width 참고 (1 ~ 12) 또는 '600px'
      */
-    labelWidth: string | number;
+    labelWidth?: string | number;
     /**
      * field value width
      * @example
      * bootstrap width 참고 (1 ~ 12) 또는 '600px'
      */
-    valueWidth: string | number;
+    valueWidth?: string | number;
     /**
      * field label position
      * @example
      * "top" | "left" | "left-left" | "left-right" | "right" | "right-left" | "right-right" | "bottom"
      */
-    position: string;
+    position?: string;
   };
 
   /**
@@ -87,5 +87,7 @@ export interface FormOptions {
       message: string; // '{type} 유효하지 않습니다.'
     };
   };
-  fields: any[];
+  fields: FormField[];
 }
+
+export type FormOptionsInput = Omit<FormOptions, "fields"> & { fields: FormFieldInput[] };

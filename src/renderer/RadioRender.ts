@@ -38,7 +38,7 @@ export default class RadioRender extends Render {
     if (initDefaultValueFlag) {
       this.defaultCheckValue = initDefaultValue;
     } else if (!this.defaultCheckValue) {
-      this.defaultCheckValue = this.field.listItem?.list?.length > 0 ? this.field.listItem?.list[0][valueKey] : "";
+      this.defaultCheckValue = (this.field.listItem?.list?.length ?? 0) > 0 ? this.field.listItem!.list[0][valueKey] : "";
     }
 
     this.mounted();

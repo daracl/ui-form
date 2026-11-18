@@ -15,7 +15,7 @@ import { resolveClassName } from "@daracl/core/utils";
 
 export function resolveFieldStyle(formOptions: FormOptions, field: FormField, beforeField?: FormField | null, isLabelHide?: boolean): FieldStyle {
   const fieldStyle = {
-    rowStyleClass: orientationClassName(field.orientation),
+    rowStyleClass: orientationClassName(field.orientation ?? "horizontal"),
     fieldClass: "",
     fieldStyle: "",
     labelClass: "",
@@ -26,12 +26,12 @@ export function resolveFieldStyle(formOptions: FormOptions, field: FormField, be
     tabAlignClass: "",
   };
 
-  const defaultLabelWidth = beforeField?.style?.labelWidth ?? formOptions.style.labelWidth ?? "3";
-  let defaultValueWidth = beforeField?.style?.valueWidth ?? formOptions.style.valueWidth ?? "9";
-  const position = beforeField?.style?.position ?? formOptions.style.position;
+  const defaultLabelWidth = beforeField?.style?.labelWidth ?? formOptions.style?.labelWidth ?? "3";
+  let defaultValueWidth = beforeField?.style?.valueWidth ?? formOptions.style?.valueWidth ?? "9";
+  const position = beforeField?.style?.position ?? formOptions.style?.position ?? "left-right";
 
   const width = field.style?.width;
-  const positionArr = FIELD_POSITION_STYLE[field.style?.position] ?? FIELD_POSITION_STYLE[position] ?? FIELD_POSITION_STYLE.top;
+  const positionArr = FIELD_POSITION_STYLE[field.style?.position ?? ""] ?? FIELD_POSITION_STYLE[position] ?? FIELD_POSITION_STYLE.top;
 
   fieldStyle.fieldClass = `${positionArr[0] ? "df-" + positionArr[0] : ""} ${field.style?.customClass || ""}`;
   if (width) {
@@ -42,7 +42,7 @@ export function resolveFieldStyle(formOptions: FormOptions, field: FormField, be
     }
   }
 
-  fieldStyle.tabAlignClass = "df-tab-al-" + (["right", "center"].includes(field.style?.tabAlign) ? field.style.tabAlign : "left");
+  fieldStyle.tabAlignClass = "df-tab-al-" + (["right", "center"].includes(field.style?.tabAlign ?? "") ? field.style?.tabAlign : "left");
 
   const labelWidth = field.style?.labelWidth || defaultLabelWidth;
   fieldStyle.labelAlignClass = positionArr[1];

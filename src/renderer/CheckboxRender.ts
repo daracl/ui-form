@@ -82,7 +82,7 @@ export default class CheckboxRender extends Render {
     field.listItem?.list?.forEach((val) => {
       const checkVal = String(val[valueKey] ?? "");
       templates.push(`
-          <span class="df-field-item ${orientationClassName(field.listItem.orientation ?? OrientationMap.horizontal)}">
+          <span class="df-field-item ${orientationClassName(field.listItem?.orientation ?? OrientationMap.horizontal)}">
               <label>
                   <input type="checkbox" name="${fieldName}" value="${checkVal ? utils.replaceXss(checkVal) : ""}" class="df-form-field df-checkbox" ${val.selected ? "checked" : ""} ${val.disabled ? "disabled" : ""}  />
                   ${Render.valuesLabelValue(labelKey, val)}

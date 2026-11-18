@@ -32,6 +32,11 @@
         background-clip: padding-box;
         border-radius: 4px;
         transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+
+        .df-file-disabled {
+          opacity: 0.5;
+          cursor: not-allowed;
+        }
       }
     }
 

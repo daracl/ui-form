@@ -135,10 +135,10 @@ export default class TabRender extends Render {
           if (childField.children) {
             let tabFormOptions = {
               style: {
-                width: formOptions.style.width ?? "100%",
-                labelWidth: formOptions.style.labelWidth ?? 3,
-                valueWidth: formOptions.style.valueWidth ?? 9,
-                position: formOptions.style.position ?? "left-right",
+                width: formOptions.style?.width ?? "100%",
+                labelWidth: formOptions.style?.labelWidth ?? 3,
+                valueWidth: formOptions.style?.valueWidth ?? 9,
+                position: formOptions.style?.position ?? "left-right",
               },
               useTypeValue: formOptions.useTypeValue,
               autoCreate: false,
@@ -168,12 +168,12 @@ export default class TabRender extends Render {
 
     let useTypeValue = this.getForm().getOptions().useTypeValue;
 
-    for (const childField of this.field.children) {
+    for (const childField of this.field.children ?? []) {
       const childFieldValue = childField.$tabForm?.getValue(false);
       if (useTypeValue) {
         allTabValue[childField.$validName] = childFieldValue;
       } else {
-        for (let [key, value] of Object.entries(childFieldValue)) {
+        for (let [key, value] of Object.entries(childFieldValue ?? {})) {
           allTabValue[key] = value;
         }
       }
@@ -182,7 +182,7 @@ export default class TabRender extends Render {
   }
 
   setValue(value: any): void {
-    for (const childField of this.field.children) {
+    for (const childField of this.field.children ?? []) {
       let tabChildValue = value[childField.$validName];
 
       if (tabChildValue) {
@@ -212,7 +212,7 @@ export default class TabRender extends Render {
 
     const field = this.field;
 
-    for (const childField of field.children) {
+    for (const childField of field.children ?? []) {
       const validResult = childField.$tabForm?.validForm();
 
       if (validResult && validResult.length > 0) {

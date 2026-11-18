@@ -4,6 +4,11 @@ import { ValidResult } from "@t/ValidResult";
 import { RULES } from "@/constants";
 
 let localeMessage: Message = {
+  file: {
+    maxFileSize: "파일 크기는 {maxFileSize}바이트 이하여야 합니다.",
+    maxFiles: "파일은 최대 {maxFiles}개까지 선택할 수 있습니다.",
+    accept: "허용된 파일 형식만 선택할 수 있습니다.",
+  },
   required: "{label} 필수 입력사항입니다.",
   fileButton: "파일찾기",
   selection: "선택",
@@ -92,7 +97,10 @@ class Language {
         messageFormats.push(messageFormat);
       }
 
-      if (field.renderType == "number" || field.renderType == "range") {
+      if (field.renderType === "file") {
+        messageFormat = this.lang.file?.[constraint as keyof NonNullable<Message["file"]>] ?? "";
+        messageFormats.push(messageFormat);
+      } else if (field.renderType == "number" || field.renderType == "range") {
         messageFormat = (this.lang.number as any)[constraint];
         messageFormats.push(messageFormat);
       } else {

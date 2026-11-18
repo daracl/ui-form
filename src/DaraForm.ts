@@ -1,5 +1,5 @@
-import { FormOptions } from "@t/FormOptions";
-import { FormField } from "@t/FormField";
+import { FormOptions, FormOptionsInput } from "@t/FormOptions";
+import { FormField, FormFieldInput } from "@t/FormField";
 import * as utils from "./util/utils";
 import { ValidResult } from "@t/ValidResult";
 import { Message } from "@t/Message";
@@ -9,7 +9,7 @@ import { numberValidator } from "./rule/numberValidator";
 import { regexpValidator } from "./rule/regexpValidator";
 import FieldInfoMap from "@/FieldInfoMap";
 import FormTemplate from "./FormTemplate";
-import { FORM_MODE } from "./constants";
+import { FORM_MODE, FILE_REMOVE_IDS_SUFFIX } from "./constants";
 import { initFormOptions, normalizeFields, setDefaultOptions } from "./defaultOption";
 
 declare const APP_VERSION: string;
@@ -33,6 +33,16 @@ export interface FormChangeListener {
 export interface Unsubscribe {
   (): void;
 }
+
+type FormValueGetter = {
+  <T = Record<string, unknown>>(isValid: true): Promise<T>;
+  <T = Record<string, unknown>>(isValid?: false): T;
+};
+
+type FormDataGetter = {
+  (isValid: true): Promise<FormData>;
+  (isValid?: false): FormData;
+};
 
 // all instance
 const allInstance: DaraFormMap = {};
@@ -64,7 +74,7 @@ export class DaraForm {
 
   private changeListeners: FormChangeListener[] = [];
 
-  constructor(formElement: Element, options: FormOptions, message?: Message) {
+  constructor(formElement: Element, options: FormOptionsInput, message?: Message) {
     this.options = initFormOptions(options);
 
     Language.set(message);
@@ -77,7 +87,7 @@ export class DaraForm {
       formElement.setAttribute("name", this.selector);
       formElement.setAttribute(SEQ_ATTR_KEY, this.selector);
 
-      if (this.options.style.width) {
+      if (this.options.style?.width) {
         formElement.setAttribute("style", `width:${this.options.style.width};`);
       }
 
@@ -93,7 +103,7 @@ export class DaraForm {
     }
   }
 
-  public static create(formElement: Element, options: FormOptions, message?: Message): DaraForm {
+  public static create(formElement: Element, options: FormOptionsInput, message?: Message): DaraForm {
     return new DaraForm(formElement, options, message);
   }
 
@@ -101,7 +111,7 @@ export class DaraForm {
     Language.set(message);
   }
 
-  public static setDefaultOptions(options: FormOptions, message?: Message): void {
+  public static setDefaultOptions(options: Partial<FormOptionsInput>, message?: Message): void {
     setDefaultOptions(options);
 
     if (message) {
@@ -121,6 +131,7 @@ export class DaraForm {
     fields.forEach((field) => {
       this.formTemplate.addRow(field);
     });
+    this.changeMode(this.options.mode ?? "new");
     this.conditionCheck();
 
     if (this.options.onMounted) {
@@ -160,12 +171,22 @@ export class DaraForm {
         }
       });
     }
+    if (this.fieldInfoMap) {
+      for (const field of Object.values(this.fieldInfoMap.getAllFieldInfo())) {
+        if (field.renderType === "file") field.$instance.setDisabled(field.disabled === true || mode === "view");
+      }
+    }
   };
 
   /**
    * 폼 데이터 reset
    */
   public resetForm = () => {
+    this.resetFields();
+    this.conditionCheck();
+  };
+
+  private resetFields() {
     const fieldMap = this.fieldInfoMap.getAllFieldInfo();
     for (const seq in fieldMap) {
       const fieldInfo = fieldMap[seq];
@@ -176,8 +197,7 @@ export class DaraForm {
       }
     }
     this.formValue = {};
-    this.conditionCheck();
-  };
+  }
 
   /**
    * field 값 reset
@@ -229,13 +249,13 @@ export class DaraForm {
    * @param isValid 폼 유효성 검사 여부 default:false|undefined true일경우 검사.
    * @returns
    */
-  public getValue = (isValid: boolean): any => {
+  public getValue: FormValueGetter = ((isValid: boolean = false) => {
     return this.fieldInfoMap.getAllFieldValue(this.formValue, isValid);
-  };
+  }) as FormValueGetter;
 
-  public getFormDataValue = (isValid: boolean): any => {
+  public getFormDataValue: FormDataGetter = ((isValid: boolean = false) => {
     return this.fieldInfoMap.getFormDataValue(this.formValue, isValid);
-  };
+  }) as FormDataGetter;
 
   /**
    * 폼 필드 value 셋팅
@@ -243,7 +263,7 @@ export class DaraForm {
    */
   public setValue = (values: any, dataClear?: boolean | undefined) => {
     if (dataClear !== false) {
-      this.resetForm();
+      this.resetFields();
     }
 
     Object.keys(values).forEach((fieldName) => {
@@ -266,12 +286,14 @@ export class DaraForm {
     }
   }
 
-  public setFieldItems = (fieldName: string, values: any) => {
+  public setFieldItems = (fieldName: string, values: any): boolean => {
     const field = this.fieldInfoMap.getFieldName(fieldName);
 
     if (field) {
-      return field.$instance.setValueItems(values);
+      field.$instance.setValueItems(values);
+      return true;
     }
+    return false;
   };
 
   /**
@@ -279,10 +301,11 @@ export class DaraForm {
    *
    * @param {FormField} field
    */
-  public addField = (field: FormField) => {
-    if (!normalizeFields([field]).length) return;
-    this.options.fields.push(field);
-    this.formTemplate.addRow(field);
+  public addField = (field: FormFieldInput) => {
+    if (!normalizeFields([field as FormField]).length) return;
+    const runtimeField = field as FormField;
+    this.options.fields.push(runtimeField);
+    this.formTemplate.addRow(runtimeField);
     this.conditionCheck();
   };
 
@@ -400,7 +423,7 @@ export class DaraForm {
     const keys = [fieldInfo.name, fieldInfo.$validName];
 
     if (fieldInfo.renderType === "file") {
-      keys.push(fieldInfo.$validName + "RemoveIds");
+      keys.push(fieldInfo.$validName + FILE_REMOVE_IDS_SUFFIX);
     } else if (utils.isTabType(fieldInfo)) {
       keys.push(...Object.keys(fieldInfo.$instance.getValue() ?? {}));
     }
@@ -519,9 +542,12 @@ export class DaraForm {
     this.changeListeners.forEach((listener) => listener(event));
   }
 
-  public setFieldDisabled(fieldName: string, flag: boolean) {
+  public setFieldDisabled(fieldName: string, flag: boolean): boolean {
     const fieldInfo = this.fieldInfoMap.getFieldName(fieldName);
-    fieldInfo.$instance.setDisabled(flag);
+    if (!fieldInfo) return false;
+    fieldInfo.disabled = flag;
+    fieldInfo.$instance.setDisabled(flag || this.options.mode === "view");
+    return true;
   }
 
   /**
@@ -531,9 +557,11 @@ export class DaraForm {
    * @param {string} fieldName
    * @param {string} desc
    */
-  public setFieldDescription(fieldName: string, desc: string) {
+  public setFieldDescription(fieldName: string, desc: string): boolean {
     const fieldInfo = this.fieldInfoMap.getFieldName(fieldName);
+    if (!fieldInfo) return false;
     fieldInfo.$instance.setDescription(desc);
+    return true;
   }
 
   public destroy = () => {

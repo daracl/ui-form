@@ -32,9 +32,13 @@ export const RULES = {
   REGEXP: "regexp",
   REQUIRED: "required",
   VALIDATOR: "validator",
+  MAX_FILE_SIZE: "maxFileSize",
+  MAX_FILES: "maxFiles",
+  FILE_ACCEPT: "accept",
 } as const;
 
 export const FIELD_PREFIX = "dff"; // daracl form field
+export const FILE_REMOVE_IDS_SUFFIX = "RemoveIds";
 
 export const RENDER_TEMPLATE: any = {
   number: NumberRender,

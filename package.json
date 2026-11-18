@@ -1,6 +1,6 @@
 {
   "name": "@daracl/form",
-  "version": "0.0.22",
+  "version": "0.0.23",
   "sideEffects": false,
   "description": "Daracl form validation ",
   "author": {
@@ -60,8 +60,8 @@
     "editor.formatOnSave": false
   },
   "peerDependencies": {
-    "@daracl/core": "^0.0.13",
-    "@daracl/datetimepicker": "^0.0.13",
+    "@daracl/core": "^0.0.15",
+    "@daracl/datetimepicker": "^0.0.19",
     "@daracl/toast": "^0.0.10"
   },
   "dependencies": {
@@ -69,8 +69,8 @@
     "tslib": "^2.8.1"
   },
   "devDependencies": {
-    "@daracl/core": "0.0.13",
-    "@daracl/datetimepicker": "^0.0.13",
+    "@daracl/core": "^0.0.15",
+    "@daracl/datetimepicker": "^0.0.19",
     "@daracl/toast": "^0.0.10",
     "@playwright/test": "^1.55.1",
     "@types/node": "^24.0.0",

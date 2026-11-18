@@ -1,4 +1,4 @@
-import { FIELD_PREFIX } from "@/constants";
+import { FIELD_PREFIX, FILE_REMOVE_IDS_SUFFIX } from "@/constants";
 import { FormField } from "./types/FormField";
 import { ValidResult } from "./types/ValidResult";
 import { getRenderer } from "./util/renderFactory";
@@ -141,17 +141,18 @@ export default class FieldInfoMap {
    */
   public getAllFieldValue(formValue: any, validationCheck: boolean) {
     const useTypeValue = this.form.getOptions().useTypeValue;
+    const result = this.cleanFieldValues(formValue);
 
     if (validationCheck !== true) {
       for (let [key, fieldInfo] of Object.entries(this.allFieldInfo)) {
-        formValue = addFormValue(formValue, fieldInfo, useTypeValue);
+        if (this.isConditionFieldCheck(fieldInfo)) addFormValue(result, fieldInfo, useTypeValue);
       }
-      return formValue;
+      return result;
     }
 
     return new Promise((resolve, reject) => {
       for (let [key, fieldInfo] of Object.entries(this.allFieldInfo)) {
-        if (!fieldInfo.$instance.isEnableView()) {
+        if (!this.isConditionFieldCheck(fieldInfo)) {
           continue;
         }
 
@@ -162,37 +163,36 @@ export default class FieldInfoMap {
           return;
         }
 
-        formValue = addFormValue(formValue, fieldInfo, useTypeValue);
+        addFormValue(result, fieldInfo, useTypeValue);
       }
 
-      resolve(formValue);
+      resolve(result);
     });
   }
 
   public getFormDataValue(formValue: any, validationCheck: boolean) {
+    const useTypeValue = this.form.getOptions().useTypeValue;
+    const values = this.cleanFieldValues(formValue);
+    const createFormData = () => {
+      const data = new FormData();
+      for (const [key, value] of Object.entries(values)) data.set(key, value as string);
+      return data;
+    };
     if (validationCheck !== true) {
-      let reval = new FormData();
-
-      for (let [key, value] of Object.entries(formValue)) {
-        reval.set(key, value as any);
-      }
+      let reval = createFormData();
 
       for (let [key, fieldInfo] of Object.entries(this.allFieldInfo)) {
-        addFieldFormData(reval, fieldInfo, fieldInfo.$instance.getValue());
+        if (this.isConditionFieldCheck(fieldInfo)) addFieldFormData(reval, fieldInfo, useTypeValue);
       }
 
       return reval;
     }
 
     return new Promise((resolve, reject) => {
-      let reval = new FormData();
-
-      for (let [key, value] of Object.entries(formValue)) {
-        reval.set(key, value as any);
-      }
+      let reval = createFormData();
 
       for (let [key, fieldInfo] of Object.entries(this.allFieldInfo)) {
-        if (!fieldInfo.$instance.isEnableView()) {
+        if (!this.isConditionFieldCheck(fieldInfo)) {
           continue;
         }
 
@@ -203,11 +203,21 @@ export default class FieldInfoMap {
           return;
         }
 
-        addFieldFormData(reval, fieldInfo, fieldInfo.$instance.getValue());
+        addFieldFormData(reval, fieldInfo, useTypeValue);
       }
 
       resolve(reval);
     });
+  }
+
+  private cleanFieldValues(formValue: Record<string, unknown>): Record<string, unknown> {
+    const values = { ...formValue };
+    for (const field of Object.values(this.allFieldInfo)) {
+      delete values[field.name];
+      delete values[field.$validName];
+      delete values[field.$validName + FILE_REMOVE_IDS_SUFFIX];
+    }
+    return values;
   }
 
   /**
@@ -243,21 +253,23 @@ export default class FieldInfoMap {
 
     let condFlag = false;
 
-    if (field.conditional.custom) {
-      condFlag = field.conditional.custom.call(null, field);
+    const conditional = field.conditional;
+    if (!conditional) return true;
+    if (conditional.custom) {
+      condFlag = conditional.custom.call(null, field);
     } else {
-      if (field.conditional.field) {
-        const condField = this.getFieldName(field.conditional.field);
+      if (conditional.field) {
+        const condField = this.getFieldName(conditional.field);
 
         if (condField) {
-          if (field.conditional.eq == condField.$instance.getValue()) {
+          if (conditional.eq == condField.$instance.getValue()) {
             condFlag = true;
           }
         }
       }
     }
 
-    return condFlag;
+    return conditional.show === false ? !condFlag : condFlag;
   }
 
   /**
@@ -324,7 +336,7 @@ function addFormValue(formData: any, fieldInfo: FormField, useTypeValue?: boolea
     const uploadFiles = fieldValue["uploadFile"];
 
     formData[fieldInfo.$validName] = uploadFiles;
-    formData[fieldInfo.$validName + "RemoveIds"] = fieldValue["removeIds"];
+    formData[fieldInfo.$validName + FILE_REMOVE_IDS_SUFFIX] = fieldValue["removeIds"];
   } else {
     if (useTypeValue !== true) {
       if (utils.isTabType(fieldInfo)) {
@@ -358,7 +370,9 @@ function addFieldFormData(formData: FormData, fieldInfo: FormField, useTypeValue
       formData.append(fieldInfo.$validName, uploadFile);
     }
 
-    formData.set(fieldInfo.$validName + "RemoveIds", fieldValue["removeIds"]);
+    const removeKey = fieldInfo.$validName + FILE_REMOVE_IDS_SUFFIX;
+    formData.delete(removeKey);
+    for (const id of fieldValue["removeIds"]) formData.append(removeKey, String(id));
   } else {
     if (useTypeValue !== true) {
       if (utils.isTabType(fieldInfo)) {

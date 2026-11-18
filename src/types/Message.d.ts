@@ -1,4 +1,9 @@
 export interface Message {
+  file?: {
+    maxFileSize: string;
+    maxFiles: string;
+    accept: string;
+  };
   required: string;
   fileButton: string;
   selection: string;

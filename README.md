@@ -132,6 +132,14 @@ type: {
 ```
 
 # Field Option
+
+## 파일 필드 값과 옵션
+
+`getValue()`의 파일 필드는 `{필드명}: File[]`와 `{필드명}RemoveIds: (string | number)[]`로 반환됩니다. 예를 들어 `attachments` 필드에서 새 파일 하나를 선택하고 기존 파일 ID `7`을 삭제했다면 `{ attachments: [file], attachmentsRemoveIds: [7] }`입니다. 접미사는 `FILE_REMOVE_IDS_SUFFIX`로 내보냅니다. `getFormDataValue()`는 새 파일과 삭제 ID를 각각 반복 항목으로 추가합니다.
+
+파일 필드의 `rule`에는 `maxFileSize`(바이트), `maxFiles`(새 파일 개수), `accept`(예: `['.png', '.jpg']`)를 지정할 수 있습니다. 검증은 새로 선택한 파일에만 적용되고, `accept`는 파일 입력에도 반영됩니다. `rendererOptions`에는 `buttonLabel`, `multiple`(기본 `true`), `accept`, `downloadable`(기본 `true`), `allowDuplicate`(기본 `false`), `onRemove(file)`을 지정할 수 있습니다. `onRemove`가 `false`를 반환하면 삭제를 취소합니다. 기존 파일의 ID와 이름은 `listItem.valueField`, `listItem.labelField`로 매핑할 수 있습니다.
+
+`getValue()`와 `getFormDataValue()`는 조건이 거짓인 필드와 숨겨진 그룹의 자식 필드를 제외합니다. `conditional.show: false`는 조건이 참일 때 숨깁니다. `setDescription()`은 전달된 문자열을 텍스트로 표시합니다. 초기 `description` 옵션은 기존처럼 HTML을 허용하므로 신뢰할 수 있는 내용만 전달해야 합니다.
 | key | 설명 | 기본값 | 옵션값 |
 |-----|------|-----|-----|
 | name |  field name |   |  |

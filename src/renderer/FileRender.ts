@@ -1,4 +1,4 @@
-import { FileInfo, FormField } from "@t/FormField";
+import { FileInfo, FileRendererOptions, FormField } from "@t/FormField";
 import { Render } from "./Render";
 import { resetRowElementStyleClass, invalidMessage } from "@/util/validUtils";
 import { fileValidator } from "@/rule/fileValidator";
@@ -9,10 +9,31 @@ import { isArray } from "@daracl/core/utils";
 
 export default class FileRender extends Render {
   private element: HTMLInputElement;
-  private removeIds: any[] = [];
-  private uploadFiles: any = {};
-  private fileList: any[] = [];
+  private removeIds: Array<string | number> = [];
+  private uploadFiles: Record<number, File> = {};
+  private fileList: FileInfo[] = [];
   private fileSeq = 0;
+  private disabled = false;
+
+  private get fileOptions(): FileRendererOptions {
+    const options = (this.field.rendererOptions as FileRendererOptions | undefined) ?? {};
+    return {
+      buttonLabel: options.buttonLabel ?? this.field.buttonLabel,
+      multiple: options.multiple ?? this.field.multiple,
+      accept: options.accept ?? this.field.accept,
+      downloadable: options.downloadable ?? this.field.downloadable,
+      allowDuplicate: options.allowDuplicate ?? this.field.allowDuplicate,
+      onRemove: options.onRemove ?? this.field.onRemove,
+    };
+  }
+
+  private get fileIdKey(): string {
+    return this.field.listItem?.valueField ?? "fileId";
+  }
+
+  private get fileNameKey(): string {
+    return this.field.listItem?.labelField ?? "fileName";
+  }
 
   constructor(field: FormField, rowElement: HTMLElement, daraForm: DaraForm) {
     super(daraForm, field, rowElement);
@@ -33,6 +54,7 @@ export default class FileRender extends Render {
           fileList.push(item);
         }
         this.addFiles(fileList);
+        this.element.value = "";
       }
       customChangeEventCall(this.field, e, this, this.fileList);
       this.valid();
@@ -54,8 +76,8 @@ export default class FileRender extends Render {
     <div class="df-field">
       <span class="df-file-wrapper">
         <label class="df-file-label">
-          <input type="file" name="${field.$xssName}" class="df-form-field df-file" multiple />
-          ${Language.getMessage("fileButton")}
+          <input type="file" name="${field.$xssName}" class="df-form-field df-file" />
+          <span class="df-file-button-text"></span>
         </label>
         <i class="df-form-icon df-help-icon"></i>
       </span>
@@ -66,15 +88,22 @@ export default class FileRender extends Render {
     `;
 
     this.element = fieldContainerElement.querySelector(`[name="${field.$xssName}"]`) as HTMLInputElement;
+    const options = this.fileOptions;
+    this.element.multiple = options.multiple !== false;
+    const accept = options.accept ?? field.rule?.accept;
+    if (accept?.length) this.element.accept = accept.map((ext) => ext.startsWith(".") ? ext : `.${ext}`).join(",");
+    const label = fieldContainerElement.querySelector(".df-file-button-text");
+    if (label) label.textContent = options.buttonLabel ?? Language.getMessage("fileButton");
   }
 
   addFiles(files: any[]) {
+    if (this.disabled) return;
     let addFlag = false;
 
     const newFiles: FileInfo[] = [];
 
     for (let item of files) {
-      const fileCheckList = this.fileList.filter((fileItem) => fileItem.fileName == item.name && fileItem.fileSize == item.size && fileItem.lastModified == item.lastModified);
+      const fileCheckList = this.fileOptions.allowDuplicate ? [] : this.fileList.filter((fileItem) => fileItem[this.fileNameKey] === item.name && fileItem.fileSize === item.size);
 
       if (fileCheckList.length > 0) continue;
       this.fileSeq += 1;
@@ -82,6 +111,7 @@ export default class FileRender extends Render {
 
       let newFileInfo = {
         fileName: item.name,
+        [this.fileNameKey]: item.name,
         $seq: this.fileSeq,
         fileSize: item.size,
         lastModified: item.lastModified,
@@ -101,25 +131,29 @@ export default class FileRender extends Render {
 
     if (fileListElement) {
       if (initFlag === true) {
-        fileListElement.innerHTML = "";
+        fileListElement.replaceChildren();
       }
-
-      const fileTemplateHtml: string[] = [];
-
       fileList.forEach((file) => {
-        fileTemplateHtml.push(`
-        <div class="df-file-item" data-seq="${file.$seq}">
-          ${file.fileId ? '<span class="df-file-icon df-file-download"></span>' : '<span class="df-file-icon df-empty-icon"></span>'} <span class="df-file-icon df-file-remove"></span>
-          <span class="df-file-name">${file.fileName}</span > 
-        </div>`);
+        const row = document.createElement("div");
+        row.className = "df-file-item";
+        row.dataset.seq = String(file.$seq);
+        const download = document.createElement("span");
+        const canDownload = this.fileOptions.downloadable !== false && (file[this.fileIdKey] !== undefined && file[this.fileIdKey] !== null || Boolean(file.url));
+        download.className = `df-file-icon ${canDownload ? "df-file-download" : "df-empty-icon"}`;
+        const remove = document.createElement("span");
+        remove.className = "df-file-icon df-file-remove";
+        const name = document.createElement("span");
+        name.className = "df-file-name";
+        name.textContent = String(file[this.fileNameKey] ?? file.fileName ?? "");
+        row.append(download, remove, name);
+        fileListElement.append(row);
       });
-
-      fileListElement.insertAdjacentHTML("beforeend", fileTemplateHtml.join(""));
 
       fileList.forEach((item) => {
         this.removeFileEvent(item, fileListElement);
         this.downloadFileEvent(item, fileListElement);
       });
+      this.updateDisabledView();
     }
   }
 
@@ -143,8 +177,8 @@ export default class FileRender extends Render {
 
             const item = this.fileList[idx];
 
-            if (item["url"]) {
-              location.href = item["url"];
+            if (item.url) {
+              location.href = item.url;
               return;
             }
 
@@ -168,6 +202,7 @@ export default class FileRender extends Render {
     const ele = fileListElement.querySelector(`[data-seq="${item.$seq}"] .df-file-remove`);
     if (ele) {
       ele.addEventListener("click", (evt: Event) => {
+        if (this.disabled) return;
         const fileItemElement = (evt.target as Element).closest(".df-file-item");
 
         if (fileItemElement) {
@@ -177,14 +212,17 @@ export default class FileRender extends Render {
             const removeIdx = this.fileList.findIndex((v) => v.$seq === seq);
 
             const removeItem = this.fileList[removeIdx];
+            if (!removeItem || (this.field.onRemove ?? this.fileOptions.onRemove)?.(removeItem) === false) return;
 
             this.fileList.splice(removeIdx, 1);
             delete this.uploadFiles[seq];
             fileItemElement.remove();
 
-            if (removeItem.fileId) {
-              this.removeIds.push(removeItem.fileId);
+            const fileId = removeItem[this.fileIdKey];
+            if (typeof fileId === "string" || typeof fileId === "number") {
+              this.removeIds.push(fileId);
             }
+            customChangeEventCall(this.field, evt, this, this.getValue());
           }
         }
         this.valid();
@@ -195,18 +233,16 @@ export default class FileRender extends Render {
   getValue() {
     return {
       uploadFile: Object.values(this.uploadFiles),
-      removeIds: this.removeIds,
+      removeIds: [...this.removeIds],
     };
   }
 
   public setValueItems(value: any): void {
     this.fileList = [];
-    this.uploadFiles = [];
+    this.uploadFiles = {};
     this.removeIds = [];
     for (let file of value) {
-      file.$seq = this.fileSeq += 1;
-
-      this.fileList.push(file);
+      this.fileList.push({ ...file, $seq: this.fileSeq += 1 });
     }
 
     this.setFileList(this.fileList, true);
@@ -220,7 +256,7 @@ export default class FileRender extends Render {
   }
 
   reset() {
-    this.setValue("");
+    this.element.value = "";
     this.setValueItems([]);
     resetRowElementStyleClass(this.rowElement);
   }
@@ -230,10 +266,23 @@ export default class FileRender extends Render {
   }
 
   valid(): any {
-    const validResult = fileValidator(this.element, this.field, this.fileList);
+    const validResult = fileValidator(this.element, this.field, this.fileList, Object.values(this.uploadFiles));
 
     invalidMessage(this.field, this.rowElement, validResult);
 
     return validResult;
+  }
+
+  public setDisabled(flag: boolean): void {
+    this.disabled = flag;
+    this.element.disabled = flag;
+    this.updateDisabledView();
+  }
+
+  private updateDisabledView(): void {
+    this.rowElement.querySelector(".df-file-label")?.classList.toggle("df-file-disabled", this.disabled);
+    this.rowElement.querySelectorAll<HTMLElement>(".df-file-remove").forEach((element) => {
+      element.hidden = this.disabled;
+    });
   }
 }

@@ -37,7 +37,7 @@ export default class RangeRender extends Render {
     fieldContainerElement.innerHTML = `
         <div class="df-field">
             <span class="df-range-num">${field.defaultValue ? field.defaultValue : 0}</span>
-            <input type="range" name="${field.$xssName}" class="df-form-field df-range df-help-icon" min="${field.rule.minimum}" max="${field.rule.maximum}"/>
+            <input type="range" name="${field.$xssName}" class="df-form-field df-range df-help-icon" min="${field.rule?.minimum ?? 0}" max="${field.rule?.maximum ?? 100}"/>
         </div> 
         ${Render.getDescriptionTemplate(field)}
         <div class="df-help-message"></div>

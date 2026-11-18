@@ -145,11 +145,11 @@ export abstract class Render {
     } else {
       const fieldEle = this.rowElement.querySelector(".df-field");
       if (fieldEle) {
-        const parser = new DOMParser();
         this.field.description = desc;
-        const descEle = parser.parseFromString(Render.getDescriptionTemplate(this.field), "text/html").querySelector(".df-description");
-
-        if (descEle) fieldEle.parentNode?.insertBefore(descEle, fieldEle.nextSibling);
+        const newDescription = document.createElement("div");
+        newDescription.className = `df-description ${this.field.descriptionClass ?? ""}`;
+        newDescription.textContent = desc;
+        fieldEle.parentNode?.insertBefore(newDescription, fieldEle.nextSibling);
       }
     }
   }
