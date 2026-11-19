@@ -109,7 +109,7 @@ export abstract class Render {
       field.$value = changeInfo.value;
     }
 
-    this.daraForm.conditionCheck();
+    this.daraForm.conditionCheck(field.name);
   }
 
   public focus() {

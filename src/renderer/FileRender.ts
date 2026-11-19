@@ -19,6 +19,7 @@ export default class FileRender extends Render {
     const options = (this.field.rendererOptions as FileRendererOptions | undefined) ?? {};
     return {
       buttonLabel: options.buttonLabel ?? this.field.buttonLabel,
+      sizeUnit: options.sizeUnit ?? "mb",
       multiple: options.multiple ?? this.field.multiple,
       accept: options.accept ?? this.field.accept,
       downloadable: options.downloadable ?? this.field.downloadable,
@@ -33,6 +34,18 @@ export default class FileRender extends Render {
 
   private get fileNameKey(): string {
     return this.field.listItem?.labelField ?? "fileName";
+  }
+
+  private formatFileSize(value: unknown): string | null {
+    const bytes = typeof value === "number" ? value : typeof value === "string" && value.trim() ? Number(value) : NaN;
+    if (!Number.isFinite(bytes) || bytes < 0) return null;
+    const unit = this.fileOptions.sizeUnit ?? "mb";
+    const unitIndex = ["b", "kb", "mb", "gb"].indexOf(unit);
+    const divisor = 1024 ** (unitIndex < 0 ? 2 : unitIndex);
+    const size = bytes / divisor;
+    const label = (unitIndex < 0 ? "mb" : unit).toUpperCase();
+    if (unitIndex === 0) return `${bytes} ${label}`;
+    return `${bytes > 0 && size < 0.01 ? "<0.01" : size.toFixed(2)} ${label}`;
   }
 
   private getDownloadUrl(value: unknown): string | null {
@@ -108,14 +121,14 @@ export default class FileRender extends Render {
 
   addFiles(files: any[]) {
     if (this.disabled) return;
-    let addFlag = false;
-
     const newFiles: FileInfo[] = [];
+    const allowDuplicate = this.fileOptions.allowDuplicate === true;
+    const existingFiles = new Set(this.fileList.map((file) => JSON.stringify([file[this.fileNameKey], file.fileSize])));
 
     for (let item of files) {
-      const fileCheckList = this.fileOptions.allowDuplicate ? [] : this.fileList.filter((fileItem) => fileItem[this.fileNameKey] === item.name && fileItem.fileSize === item.size);
-
-      if (fileCheckList.length > 0) continue;
+      const fileKey = JSON.stringify([item.name, item.size]);
+      if (!allowDuplicate && existingFiles.has(fileKey)) continue;
+      existingFiles.add(fileKey);
       this.fileSeq += 1;
       this.uploadFiles[this.fileSeq] = item;
 
@@ -128,9 +141,8 @@ export default class FileRender extends Render {
       } as FileInfo;
 
       newFiles.push(newFileInfo);
-      addFlag = true;
     }
-    if (addFlag) {
+    if (newFiles.length > 0) {
       this.setFileList(newFiles);
       this.fileList.push(...newFiles);
     }
@@ -143,6 +155,7 @@ export default class FileRender extends Render {
       if (initFlag === true) {
         fileListElement.replaceChildren();
       }
+      const fragment = document.createDocumentFragment();
       fileList.forEach((file) => {
         const row = document.createElement("div");
         row.className = "df-file-item";
@@ -156,13 +169,18 @@ export default class FileRender extends Render {
         name.className = "df-file-name";
         name.textContent = String(file[this.fileNameKey] ?? file.fileName ?? "");
         row.append(download, remove, name);
-        fileListElement.append(row);
+        const formattedSize = this.formatFileSize(file.fileSize);
+        if (formattedSize !== null) {
+          const size = document.createElement("span");
+          size.className = "df-file-size";
+          size.textContent = formattedSize;
+          row.append(size);
+        }
+        this.removeFileEvent(remove);
+        if (canDownload) this.downloadFileEvent(download);
+        fragment.append(row);
       });
-
-      fileList.forEach((item) => {
-        this.removeFileEvent(item, fileListElement);
-        this.downloadFileEvent(item, fileListElement);
-      });
+      fileListElement.append(fragment);
       this.updateDisabledView();
     }
   }
@@ -173,9 +191,7 @@ export default class FileRender extends Render {
    * @param item
    * @param fileListElement
    */
-  private downloadFileEvent(item: FileInfo, fileListElement: Element) {
-    const ele = fileListElement.querySelector(`[data-seq="${item.$seq}"] .df-file-download`);
-    if (ele) {
+  private downloadFileEvent(ele: Element) {
       ele.addEventListener("click", (evt: Event) => {
         const fileItemElement = (evt.target as Element).closest(".df-file-item");
 
@@ -186,6 +202,7 @@ export default class FileRender extends Render {
             const idx = this.fileList.findIndex((v) => v.$seq === seq);
 
             const item = this.fileList[idx];
+            if (!item) return;
 
             const downloadUrl = this.getDownloadUrl(item.url);
             if (downloadUrl) {
@@ -200,7 +217,6 @@ export default class FileRender extends Render {
           }
         }
       });
-    }
   }
 
   /**
@@ -209,9 +225,7 @@ export default class FileRender extends Render {
    * @param item
    * @param fileListElement
    */
-  private removeFileEvent(item: FileInfo, fileListElement: Element) {
-    const ele = fileListElement.querySelector(`[data-seq="${item.$seq}"] .df-file-remove`);
-    if (ele) {
+  private removeFileEvent(ele: Element) {
       ele.addEventListener("click", (evt: Event) => {
         if (this.disabled) return;
         const fileItemElement = (evt.target as Element).closest(".df-file-item");
@@ -238,7 +252,6 @@ export default class FileRender extends Render {
         }
         this.valid();
       });
-    }
   }
 
   getValue() {

@@ -137,7 +137,9 @@ type: {
 
 `getValue()`의 파일 필드는 `{필드명}: File[]`와 `{필드명}RemoveIds: (string | number)[]`로 반환됩니다. 예를 들어 `attachments` 필드에서 새 파일 하나를 선택하고 기존 파일 ID `7`을 삭제했다면 `{ attachments: [file], attachmentsRemoveIds: [7] }`입니다. 접미사는 `FILE_REMOVE_IDS_SUFFIX`로 내보냅니다. `getFormDataValue()`는 새 파일과 삭제 ID를 각각 반복 항목으로 추가합니다.
 
-파일 필드의 `rule`에는 `maxFileSize`(바이트), `maxFiles`(새 파일 개수), `accept`(예: `['.png', '.jpg']`)를 지정할 수 있습니다. 검증은 새로 선택한 파일에만 적용되고, `accept`는 파일 입력에도 반영됩니다. `rendererOptions`에는 `buttonLabel`, `multiple`(기본 `true`), `accept`, `downloadable`(기본 `true`), `allowDuplicate`(기본 `false`), `onRemove(file)`을 지정할 수 있습니다. `onRemove`가 `false`를 반환하면 삭제를 취소합니다. 기존 파일의 ID와 이름은 `listItem.valueField`, `listItem.labelField`로 매핑할 수 있습니다.
+파일 필드의 `rule`에는 `maxFileSize`(바이트), `maxFiles`(새 파일 개수), `accept`(예: `['.png', '.jpg']`)를 지정할 수 있습니다. 검증은 새로 선택한 파일에만 적용되고, `accept`는 파일 입력에도 반영됩니다. `rendererOptions`에는 `buttonLabel`, `multiple`(기본 `true`), `accept`, `downloadable`(기본 `true`), `allowDuplicate`(기본 `false`), `onRemove(file)`, `sizeUnit`(기본 `"mb"`)을 지정할 수 있습니다. `onRemove`가 `false`를 반환하면 삭제를 취소합니다. 기존 파일의 ID와 이름은 `listItem.valueField`, `listItem.labelField`로 매핑할 수 있습니다.
+
+파일 크기는 바이트 단위의 `fileSize`를 `rendererOptions.sizeUnit`으로 변환해 표시합니다. 단위는 `"b"`, `"kb"`, `"mb"`, `"gb"`를 지원하며 1 KB는 1024바이트입니다. 예: `rendererOptions: { sizeUnit: "kb" }`. 크기 값이 없는 기존 파일은 크기 표시를 생략합니다.
 
 `getValue()`와 `getFormDataValue()`는 조건이 거짓인 필드와 숨겨진 그룹의 자식 필드를 제외합니다. `conditional.show: false`는 조건이 참일 때 숨깁니다. `description`, `tooltip`, 선택지 문구 및 검증 메시지는 HTML을 실행하지 않고 텍스트로 표시합니다. 파일 항목의 `url`은 같은 출처의 HTTP(S) 주소만 직접 열며, 그 밖의 주소는 `fileDownload` 콜백으로 처리할 수 있습니다.
 | key | 설명 | 기본값 | 옵션값 |
@@ -182,6 +184,16 @@ document.documentElement.setAttribute('data-daracl-theme', 'dark');
 ```
 
 > 이전 버전의 `body.dark` / `.daracl-form.dark` 클래스 방식은 지원하지 않습니다. `data-daracl-theme` 속성만 사용합니다.
+
+## Custom templates
+
+`renderType: "custom"` displays `template` as plain text by default. To render HTML that you control, set `trustedTemplate: true`:
+
+```js
+{ name: "summary", label: "Summary", renderType: "custom", template: "<strong>Ready</strong>", trustedTemplate: true }
+```
+
+Only use `trustedTemplate` with trusted HTML. Escape or sanitize any data inserted into that HTML. When upgrading from earlier versions, add this option to custom fields that intentionally render HTML.
 
 ## License
 Darainfo is under [MIT License](./LICENSE).

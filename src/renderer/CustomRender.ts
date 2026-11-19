@@ -37,11 +37,13 @@ export default class CustomRender extends Render {
 
     const fieldContainerElement = this.rowElement.querySelector(".df-field-container") as HTMLElement;
 
-    fieldContainerElement.innerHTML = ` <div class="df-field">
-        ${fieldTemplate}
-        </div>
-          ${Render.getDescriptionTemplate(field)}
-        <div class="df-help-message"></div>`;
+    fieldContainerElement.innerHTML = `<div class="df-field"></div>${Render.getDescriptionTemplate(field)}<div class="df-help-message"></div>`;
+    const content = fieldContainerElement.querySelector(".df-field") as HTMLElement;
+    if (field.trustedTemplate === true) {
+      content.innerHTML = String(fieldTemplate);
+    } else {
+      content.textContent = String(fieldTemplate);
+    }
   }
 
   getValue() {

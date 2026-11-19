@@ -32,6 +32,8 @@ export interface FileInfo {
 
 export interface FileRendererOptions {
   buttonLabel?: string;
+  /** Display unit for fileSize (bytes). Defaults to "mb". */
+  sizeUnit?: "b" | "kb" | "mb" | "gb";
   multiple?: boolean;
   accept?: string[];
   downloadable?: boolean;
@@ -119,6 +121,8 @@ export interface FormField {
   defaultValue?: string; // 기본값
   listItem?: ValuesInfo; // dropdown, radio, checkbox
   children?: FormField[]; // child field
+  /** Allow template HTML only when its content is trusted. Defaults to plain text. */
+  trustedTemplate?: boolean;
   validator?: OptionCallback; // custom validator
   onChange?: OptionCallback; //  입력값 변경시 체크 function
   onClick?: OptionCallback; // button onclick function

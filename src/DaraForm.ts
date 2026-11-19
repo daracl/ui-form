@@ -73,6 +73,7 @@ export class DaraForm {
   public formTemplate: FormTemplate;
 
   private changeListeners: FormChangeListener[] = [];
+  private readonly viewDisabledState = new WeakMap<Element, boolean>();
 
   constructor(formElement: Element, options: FormOptionsInput, message?: Message) {
     this.options = initFormOptions(options);
@@ -148,7 +149,7 @@ export class DaraForm {
     this.options.mode = mode;
     this.formElement.setAttribute("data-df-mode", mode);
 
-    const fields = this.formElement.querySelectorAll<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>(".df-field input, " + ".df-field textarea, " + ".df-field select");
+    const fields = this.formElement.querySelectorAll<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement | HTMLButtonElement>(".df-field input, .df-field textarea, .df-field select, .df-field-container > button, .df-grid button");
 
     if (mode == "view") {
       fields.forEach((field) => {
@@ -159,6 +160,10 @@ export class DaraForm {
         if (field instanceof HTMLTextAreaElement) {
           field.readOnly = true;
         }
+        if (field instanceof HTMLSelectElement || field instanceof HTMLButtonElement || (field instanceof HTMLInputElement && ["checkbox", "radio", "range"].includes(field.type))) {
+          if (!this.viewDisabledState.has(field)) this.viewDisabledState.set(field, field.disabled);
+          field.disabled = true;
+        }
       });
     } else {
       fields.forEach((field) => {
@@ -168,6 +173,10 @@ export class DaraForm {
 
         if (field instanceof HTMLTextAreaElement) {
           field.readOnly = false;
+        }
+        if (this.viewDisabledState.has(field)) {
+          field.disabled = this.viewDisabledState.get(field)!;
+          this.viewDisabledState.delete(field);
         }
       });
     }
@@ -183,6 +192,7 @@ export class DaraForm {
    */
   public resetForm = () => {
     this.resetFields();
+    if (this.options.mode === "view") this.changeMode("view");
     this.conditionCheck();
   };
 
@@ -206,7 +216,8 @@ export class DaraForm {
   public resetField = (fieldName: string) => {
     this.fieldInfoMap.getFieldName(fieldName).$instance.reset();
     this.formValue[fieldName] = "";
-    this.conditionCheck();
+    if (this.options.mode === "view") this.changeMode("view");
+    this.conditionCheck(fieldName);
   };
 
   /**
@@ -269,12 +280,13 @@ export class DaraForm {
     Object.keys(values).forEach((fieldName) => {
       this._setFieldValue(fieldName, values[fieldName]);
     });
+    if (this.options.mode === "view") this.changeMode("view");
     this.conditionCheck();
   };
 
   public setFieldValue = (fieldName: string, value: any) => {
     this._setFieldValue(fieldName, value);
-    this.conditionCheck();
+    this.conditionCheck(fieldName);
   };
 
   private _setFieldValue(fieldName: string, value: any) {
@@ -291,6 +303,7 @@ export class DaraForm {
 
     if (field) {
       field.$instance.setValueItems(values);
+      if (this.options.mode === "view") this.changeMode("view");
       return true;
     }
     return false;
@@ -306,6 +319,7 @@ export class DaraForm {
     const runtimeField = field as FormField;
     this.options.fields.push(runtimeField);
     this.formTemplate.addRow(runtimeField);
+    if (this.options.mode === "view") this.changeMode("view");
     this.conditionCheck();
   };
 
@@ -514,8 +528,8 @@ export class DaraForm {
     return this.options;
   };
 
-  public conditionCheck() {
-    this.fieldInfoMap.conditionCheck();
+  public conditionCheck(changedFieldName?: string) {
+    this.fieldInfoMap.conditionCheck(changedFieldName);
     this.notifyChange();
   }
 

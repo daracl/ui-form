@@ -21,7 +21,9 @@ export default class FieldInfoMap {
 
   private keyNameMap: StringNumberMap = {};
 
-  private conditionFields: string[] = [];
+  private conditionFields = new Set<string>();
+  private conditionDependencies = new Map<string, Set<string>>();
+  private customConditionFields = new Set<string>();
 
   private fieldPrefix;
 
@@ -48,7 +50,14 @@ export default class FieldInfoMap {
     field.$renderType = getRenderer(field);
 
     if (field.conditional) {
-      this.conditionFields.push(field.$key);
+      this.conditionFields.add(field.$key);
+      if (field.conditional.custom) {
+        this.customConditionFields.add(field.$key);
+      } else if (field.conditional.field) {
+        const dependencies = this.conditionDependencies.get(field.conditional.field) ?? new Set<string>();
+        dependencies.add(field.$key);
+        this.conditionDependencies.set(field.conditional.field, dependencies);
+      }
     }
   }
 
@@ -129,7 +138,13 @@ export default class FieldInfoMap {
 
     delete this.allFieldInfo[fieldKey];
 
-    this.conditionFields = this.conditionFields.filter((key) => key !== fieldKey);
+    this.conditionFields.delete(fieldKey);
+    this.customConditionFields.delete(fieldKey);
+    if (fieldInfo?.conditional?.field) {
+      const dependencies = this.conditionDependencies.get(fieldInfo.conditional.field);
+      dependencies?.delete(fieldKey);
+      if (dependencies?.size === 0) this.conditionDependencies.delete(fieldInfo.conditional.field);
+    }
   }
 
   /**
@@ -247,7 +262,7 @@ export default class FieldInfoMap {
    * @returns
    */
   public isConditionField(field: FormField) {
-    if (!this.conditionFields.includes(field.$key)) {
+    if (!this.conditionFields.has(field.$key)) {
       return true;
     }
 
@@ -277,9 +292,13 @@ export default class FieldInfoMap {
    *
    * @public
    */
-  public conditionCheck() {
-    this.conditionFields.forEach((fieldKey) => {
+  public conditionCheck(changedFieldName?: string) {
+    const fields = changedFieldName === undefined
+      ? this.conditionFields
+      : new Set([...this.customConditionFields, ...(this.conditionDependencies.get(changedFieldName) ?? [])]);
+    fields.forEach((fieldKey) => {
       const fieldInfo = this.allFieldInfo[fieldKey];
+      if (!fieldInfo) return;
 
       let condFlag = this.isConditionField(fieldInfo);
 

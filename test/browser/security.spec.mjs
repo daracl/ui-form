@@ -5,6 +5,24 @@ test.beforeEach(async ({ page }) => {
   await page.waitForFunction(() => window.DaraForm);
 });
 
+test('custom template text is safe by default and trusted HTML requires opt-in', async ({ page }) => {
+  const result = await page.evaluate(() => {
+    window.__securityTriggered = 0;
+    const payload = '<img src=x onerror="window.__securityTriggered++">';
+    window.DaraForm.create(document.querySelector('#form'), { fields: [
+      { name: 'safe', label: 'Safe', renderType: 'custom', template: payload },
+      { name: 'trusted', label: 'Trusted', renderType: 'custom', template: '<strong>OK</strong>', trustedTemplate: true },
+    ] });
+    return {
+      safeText: document.querySelectorAll('.df-field')[0].textContent,
+      imageCount: document.querySelectorAll('#form img').length,
+      trustedTag: document.querySelectorAll('.df-field')[1].firstElementChild?.tagName,
+      triggered: window.__securityTriggered,
+    };
+  });
+  expect(result).toEqual({ safeText: '<img src=x onerror="window.__securityTriggered++">', imageCount: 0, trustedTag: 'STRONG', triggered: 0 });
+});
+
 test('선택지의 문구와 값은 HTML로 실행되지 않는다', async ({ page }) => {
   const result = await page.evaluate(() => {
     window.__securityTriggered = 0;
